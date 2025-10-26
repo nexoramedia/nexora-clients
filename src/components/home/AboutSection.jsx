@@ -20,18 +20,18 @@ import { HiSparkles } from "react-icons/hi";
 import { useReviews } from "../../hook/useReview";
 import StatsSection from "./StatsSection";
 
-// Enhanced Balloon Tag Component with Icons
+// Enhanced Balloon Tag Component with Icons - Responsive
 const BalloonTag = memo(({ text, delay = 0, direction, icon: Icon }) => {
   const positions = useMemo(() => {
     const pos = {
-      topLeft: "top-2 left-2",
-      topRight: "top-2 right-2",
-      topCenter: "top-2 left-1/2 -translate-x-1/2",
-      bottomLeft: "bottom-2 left-2",
-      bottomRight: "bottom-2 right-2",
-      bottomCenter: "bottom-2 left-1/2 -translate-x-1/2",
-      middleLeft: "top-1/2 left-2 -translate-y-1/2",
-      middleRight: "top-1/2 right-2 -translate-y-1/2",
+      topLeft: "sm:top-2 sm:left-2 top-[-40px] left-2",
+      topRight: "sm:top-2 sm:right-2 top-[-40px] right-2",
+      topCenter: "sm:top-2 left-1/2 -translate-x-1/2 top-[-40px]",
+      bottomLeft: "sm:bottom-2 sm:left-2 bottom-[-40px] left-2",
+      bottomRight: "sm:bottom-2 sm:right-2 bottom-[-40px] right-2",
+      bottomCenter: "sm:bottom-2 left-1/2 -translate-x-1/2 bottom-[-40px]",
+      middleLeft: "top-1/2 sm:left-2 left-1 -translate-y-1/2",
+      middleRight: "top-1/2 sm:right-2 right-1 -translate-y-1/2",
     };
     return pos[direction] || pos.topCenter;
   }, [direction]);
@@ -215,7 +215,7 @@ const BalloonTag = memo(({ text, delay = 0, direction, icon: Icon }) => {
       </svg>
 
       <motion.div
-        className="px-4 py-2 rounded-xl bg-gradient-to-br from-[#0084FF]/20 to-[#0066CC]/20 backdrop-blur-sm border border-[#0084FF]/30 text-white font-medium shadow-lg"
+        className="sm:px-4 sm:py-2 sm:rounded-xl px-3 py-1.5 rounded-lg bg-gradient-to-br from-[#0084FF]/20 to-[#0066CC]/20 backdrop-blur-sm border border-[#0084FF]/30 text-white font-medium shadow-lg"
         whileHover={{
           background:
             "linear-gradient(135deg, rgba(0, 132, 255, 0.25), rgba(0, 102, 204, 0.25))",
@@ -241,9 +241,9 @@ const BalloonTag = memo(({ text, delay = 0, direction, icon: Icon }) => {
             }}
             className="flex items-center justify-center"
           >
-            <Icon className="w-3 h-3 text-[#0084FF]" />
+            <Icon className="w-3 h-3 text-[#0084FF] sm:w-3 sm:h-3" />
           </motion.div>
-          <span className="text-sm font-semibold whitespace-nowrap">
+          <span className="text-sm font-semibold whitespace-nowrap sm:text-sm">
             {text}
           </span>
         </div>
@@ -713,7 +713,7 @@ const CustomerReviewsCarousel = memo(() => {
       viewport={{ once: true, margin: "-50px" }}
       id="about"
     >
-      {/* Section Title */}
+      {/* Responsive Section Title */}
       <motion.div
         className="mb-8 text-center"
         initial={{ opacity: 0, y: 20 }}
@@ -725,10 +725,10 @@ const CustomerReviewsCarousel = memo(() => {
         }}
         viewport={{ once: true, margin: "-50px" }}
       >
-        <h2 className="mb-3 text-2xl font-bold text-white md:text-3xl">
+        <h2 className="mb-3 text-xl font-bold text-white sm:text-2xl md:text-3xl">
           Hear what they're Saying about us
         </h2>
-        <p className="max-w-2xl mx-auto text-sm text-gray-400">
+        <p className="max-w-2xl px-4 mx-auto text-xs text-gray-400 sm:text-sm">
           See how businesses like yours achieved incredible results with our
           viral content strategies
         </p>
@@ -938,7 +938,8 @@ const AboutSection = memo(() => {
             }}
             viewport={{ once: true, margin: "-50px" }}
           >
-            <motion.h1 className="mb-4 text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl">
+            {/* Responsive Main Title */}
+            <motion.h1 className="px-4 mb-4 text-2xl font-bold leading-tight text-white sm:text-2xl md:text-4xl lg:text-5xl">
               <motion.span
                 className="block"
                 initial={{ opacity: 0, y: 30 }}

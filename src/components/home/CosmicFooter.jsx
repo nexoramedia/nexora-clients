@@ -127,6 +127,11 @@ export default function CosmicFooter() {
     await logout();
   };
 
+  // Handle portfolio click
+  const handlePortfolioClick = () => {
+    window.open("https://mahimshahriar.com", "_blank", "noopener,noreferrer");
+  };
+
   return (
     <footer className="relative bg-black border-t border-gray-800/30">
       {/* Background Effects */}
@@ -297,8 +302,20 @@ export default function CosmicFooter() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-gray-800/50">
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-400 md:flex-row">
-            <div className="flex items-center gap-4">
-              <span>© {currentYear} All rights reserved</span>
+            <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4">
+              <span>© {currentYear} Nexora Studio. All rights reserved.</span>
+              <span className="hidden text-gray-500 md:inline">|</span>
+              <motion.button
+                onClick={handlePortfolioClick}
+                className="transition-all duration-300 hover:text-[#0084FF] hover:scale-105"
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Crafted by{" "}
+                <span className="font-semibold text-white">
+                  Md Mahim Shahriar
+                </span>
+              </motion.button>
             </div>
 
             <div className="flex items-center gap-2">
