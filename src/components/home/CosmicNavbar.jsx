@@ -4,7 +4,6 @@ import {
   FaRocket,
   FaBars,
   FaTimes,
-  FaSearch,
   FaUserAstronaut,
   FaVideo,
   FaMagic,
@@ -184,7 +183,7 @@ const MobileMenu = ({
                   transition={{ delay: index * 0.1 }}
                   className="flex items-center gap-3 w-full p-3 rounded-xl bg-gray-800/30 text-white hover:bg-[#0084FF]/30 transition-all duration-300 group"
                   onClick={() => {
-                    scrollToSection(item.href.replace("#", ""));
+                    scrollToSection(item.href.replace("#", ""), item.name);
                     onClose();
                   }}
                 >
@@ -239,7 +238,7 @@ const MobileMenu = ({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
-                    scrollToSection("contact");
+                    scrollToSection("contact", "Contact");
                     onClose();
                   }}
                 >
@@ -261,6 +260,7 @@ export default function CosmicNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("Home");
+  const [isManualScroll, setIsManualScroll] = useState(false);
 
   const { isAuthenticated, user, logout } = useAuth();
 
@@ -273,25 +273,32 @@ export default function CosmicNavbar() {
   ];
 
   // Scroll to any section
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId, linkName) => {
+    setIsManualScroll(true);
+    setActiveLink(linkName);
+
     const section = document.getElementById(sectionId);
     if (section) {
       const offsetTop =
         section.getBoundingClientRect().top + window.pageYOffset;
-      const navbarHeight = 64; // Height of your navbar
+      const navbarHeight = 64;
 
       window.scrollTo({
         top: offsetTop - navbarHeight,
         behavior: "smooth",
       });
     }
+
+    // Reset manual scroll flag after scroll completes
+    setTimeout(() => {
+      setIsManualScroll(false);
+    }, 1500);
   };
 
   // Handle navigation click
   const handleNavClick = (name, href) => {
-    setActiveLink(name);
     const sectionId = href.replace("#", "");
-    scrollToSection(sectionId);
+    scrollToSection(sectionId, name);
   };
 
   // Handle logout
@@ -302,7 +309,6 @@ export default function CosmicNavbar() {
 
   // Handle dashboard navigation
   const handleDashboard = () => {
-    // Navigate to dashboard - adjust based on your routing
     window.location.href = "/dashboard";
     setIsProfileDropdownOpen(false);
   };
@@ -312,21 +318,51 @@ export default function CosmicNavbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      // Update active link based on scroll position
-      const sections = navigation.map((item) => item.href.replace("#", ""));
-      const scrollPosition = window.scrollY + 100; // Offset for navbar
+      // Skip scroll-based active link update during manual navigation
+      if (isManualScroll) return;
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sections[i]);
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveLink(navigation[i].name);
-          break;
+      const scrollPosition = window.scrollY + 100;
+
+      // Find which section is currently in view
+      let currentSection = "Home";
+
+      navigation.forEach((item) => {
+        const section = document.getElementById(item.href.replace("#", ""));
+        if (section) {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          const sectionBottom = sectionTop + sectionHeight;
+
+          // Check if section is in viewport with some threshold
+          if (
+            scrollPosition >= sectionTop - 100 &&
+            scrollPosition < sectionBottom - 100
+          ) {
+            currentSection = item.name;
+          }
         }
-      }
+      });
+
+      setActiveLink(currentSection);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, [isManualScroll]);
+
+  // Progress bar animation
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const scrollHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", updateProgress);
+    return () => window.removeEventListener("scroll", updateProgress);
   }, []);
 
   return (
@@ -364,7 +400,7 @@ export default function CosmicNavbar() {
                   key={item.name}
                   className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 group ${
                     activeLink === item.name
-                      ? "text-white bg-[#0084FF]/30"
+                      ? "text-white bg-[#0084FF]/30 shadow-lg shadow-[#0084FF]/20"
                       : "text-gray-300 hover:text-white hover:bg-gray-800/30"
                   }`}
                   whileHover={{ y: -2 }}
@@ -430,7 +466,7 @@ export default function CosmicNavbar() {
                     boxShadow: "0 0 20px rgba(0, 132, 255, 0.4)",
                   }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => scrollToSection("contact")}
+                  onClick={() => scrollToSection("contact", "Contact")}
                 >
                   <FaRocket className="w-4 h-4" />
                   <span>Book a Call</span>
@@ -453,14 +489,8 @@ export default function CosmicNavbar() {
 
         {/* Scrolling Progress Bar */}
         <motion.div
-          className="h-0.5 bg-gradient-to-r from-[#0084FF] to-[#0066CC]"
-          initial={{ scaleX: 0 }}
-          animate={{
-            scaleX: isScrolled
-              ? window.scrollY /
-                (document.body.scrollHeight - window.innerHeight)
-              : 0,
-          }}
+          className="h-0.5 bg-gradient-to-r from-[#0084FF] to-[#0066CC] origin-left"
+          style={{ scaleX: scrollProgress }}
           transition={{ duration: 0.1 }}
         />
       </motion.header>
