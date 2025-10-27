@@ -77,16 +77,16 @@ const ReviewWithVideo = () => {
 
   const handleEdit = (review) => {
     setFormData({
-      name: review.name,
-      profileImage: review.profileImage,
-      position: review.position,
-      quote: review.quote,
-      views: review.views,
-      subscribers: review.subscribers,
-      joined: review.joined,
-      results: review.results,
-      videoUrl: review.videoUrl,
-      thumbnailUrl: review.thumbnailUrl,
+      name: review.name || "",
+      profileImage: review.profileImage || "",
+      position: review.position || "",
+      quote: review.quote || "",
+      views: review.views || "",
+      subscribers: review.subscribers || "",
+      joined: review.joined || "",
+      results: review.results || "",
+      videoUrl: review.videoUrl || "",
+      thumbnailUrl: review.thumbnailUrl || "",
     });
     setEditingId(review._id);
     setShowForm(true);
@@ -322,7 +322,7 @@ const ReviewWithVideo = () => {
                 {/* Name */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Name *
+                    Name
                   </label>
                   <input
                     type="text"
@@ -331,14 +331,13 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="Enter reviewer name"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
                 {/* Profile Image */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Profile Image URL *
+                    Profile Image URL
                   </label>
                   <input
                     type="url"
@@ -347,7 +346,6 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="https://example.com/profile.jpg"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                   <p className="mt-1 text-xs text-gray-500">
                     YouTube profile image URL
@@ -357,7 +355,7 @@ const ReviewWithVideo = () => {
                 {/* Position */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Position/Company *
+                    Position/Company
                   </label>
                   <input
                     type="text"
@@ -366,14 +364,13 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="Position at Company"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
                 {/* Views */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Views Count *
+                    Views Count
                   </label>
                   <input
                     type="text"
@@ -382,14 +379,13 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="1.2M views"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
                 {/* Subscribers */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Subscribers *
+                    Subscribers
                   </label>
                   <input
                     type="text"
@@ -398,14 +394,13 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="500K subscribers"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
                 {/* Joined */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Join Date *
+                    Join Date
                   </label>
                   <input
                     type="text"
@@ -414,14 +409,13 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="Joined 2020"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
                 {/* Results */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Results Timeline *
+                    Results Timeline
                   </label>
                   <input
                     type="text"
@@ -430,14 +424,13 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="Results in 3 months"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
                 {/* Video URL */}
                 <div className="md:col-span-2">
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Video URL *
+                    Video URL
                   </label>
                   <input
                     type="url"
@@ -446,7 +439,6 @@ const ReviewWithVideo = () => {
                     onChange={handleInputChange}
                     placeholder="https://youtube.com/watch?v=..."
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
 
@@ -471,7 +463,7 @@ const ReviewWithVideo = () => {
                 {/* Quote */}
                 <div className="md:col-span-2">
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    Review Quote *
+                    Review Quote
                   </label>
                   <textarea
                     name="quote"
@@ -480,7 +472,6 @@ const ReviewWithVideo = () => {
                     placeholder="What did the reviewer say?"
                     rows="3"
                     className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
                   />
                 </div>
               </div>
@@ -611,29 +602,34 @@ const ReviewWithVideo = () => {
                       <div className="flex items-start gap-3">
                         <div className="relative">
                           <div className="flex items-center justify-center w-12 h-12 text-sm font-semibold text-white bg-blue-600 rounded-lg">
-                            <img
-                              src={review.profileImage}
-                              alt={review.name}
-                              className="object-cover w-full h-full rounded-lg"
-                              onError={(e) => {
-                                e.target.style.display = "none";
-                              }}
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center bg-blue-600 rounded-lg">
-                              {review.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")
-                                .toUpperCase()}
-                            </div>
+                            {review.profileImage ? (
+                              <img
+                                src={review.profileImage}
+                                alt={review.name}
+                                className="object-cover w-full h-full rounded-lg"
+                                onError={(e) => {
+                                  e.target.style.display = "none";
+                                }}
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center bg-blue-600 rounded-lg">
+                                {review.name
+                                  ? review.name
+                                      .split(" ")
+                                      .map((n) => n[0])
+                                      .join("")
+                                      .toUpperCase()
+                                  : "?"}
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold text-gray-900 truncate">
-                            {review.name}
+                            {review.name || "Unnamed Reviewer"}
                           </h4>
                           <p className="text-sm text-gray-600 truncate">
-                            {review.position}
+                            {review.position || "No position specified"}
                           </p>
                         </div>
                         <div
@@ -651,14 +647,16 @@ const ReviewWithVideo = () => {
                     {/* Card Content */}
                     <div className="p-4">
                       <p className="mb-4 italic text-gray-700 line-clamp-3">
-                        "{review.quote}"
+                        {review.quote
+                          ? `"${review.quote}"`
+                          : "No review quote provided"}
                       </p>
 
                       <div className="grid grid-cols-2 gap-3 mb-4">
                         <div>
                           <div className="text-xs text-gray-500">Views</div>
                           <div className="text-sm font-medium text-gray-900">
-                            {review.views}
+                            {review.views || "Not specified"}
                           </div>
                         </div>
                         <div>
@@ -666,19 +664,19 @@ const ReviewWithVideo = () => {
                             Subscribers
                           </div>
                           <div className="text-sm font-medium text-gray-900">
-                            {review.subscribers}
+                            {review.subscribers || "Not specified"}
                           </div>
                         </div>
                         <div>
                           <div className="text-xs text-gray-500">Joined</div>
                           <div className="text-sm font-medium text-gray-900">
-                            {review.joined}
+                            {review.joined || "Not specified"}
                           </div>
                         </div>
                         <div>
                           <div className="text-xs text-gray-500">Results</div>
                           <div className="text-sm font-medium text-gray-900">
-                            {review.results}
+                            {review.results || "Not specified"}
                           </div>
                         </div>
                       </div>
@@ -791,7 +789,7 @@ const ReviewWithVideo = () => {
             <p className="mb-6 text-gray-600">
               Are you sure you want to delete the review from{" "}
               <span className="font-semibold text-gray-900">
-                {reviewToDelete?.name}
+                {reviewToDelete?.name || "Unnamed Reviewer"}
               </span>
               ? This action cannot be undone.
             </p>
