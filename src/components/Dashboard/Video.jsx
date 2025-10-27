@@ -27,7 +27,7 @@ const Video = () => {
     { value: "saas", label: "SaaS Videos", limit: 4 },
     { value: "ads-vsl", label: "Ads & VSL", limit: 4 },
     { value: "introduction", label: "Introduction", limit: 1 },
-    { value: "case-study", label: "Case Study", limit: 1 }, // New category", label: "Other", limit: 4 },
+    { value: "case-study", label: "Case Study", limit: 1 },
   ];
 
   useEffect(() => {
@@ -157,10 +157,30 @@ const Video = () => {
   };
 
   const extractYouTubeId = (url) => {
+    // Handle regular YouTube URLs
     const regExp =
-      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?)|(shorts\/))\??v?=?([^#&?]*).*/;
     const match = url.match(regExp);
-    return match && match[7].length === 11 ? match[7] : null;
+
+    if (match && match[8].length === 11) {
+      return match[8];
+    }
+
+    // Additional check for youtu.be short URLs
+    const youtuBeRegex = /youtu\.be\/([^#&?]{11})/;
+    const youtuBeMatch = url.match(youtuBeRegex);
+    if (youtuBeMatch && youtuBeMatch[1].length === 11) {
+      return youtuBeMatch[1];
+    }
+
+    // Check for YouTube Shorts specific format
+    const shortsRegex = /youtube\.com\/shorts\/([^#&?]{11})/;
+    const shortsMatch = url.match(shortsRegex);
+    if (shortsMatch && shortsMatch[1].length === 11) {
+      return shortsMatch[1];
+    }
+
+    return null;
   };
 
   const getCategoryStats = () => {
@@ -455,15 +475,19 @@ const Video = () => {
                   name="videoUrl"
                   value={formData.videoUrl}
                   onChange={handleInputChange}
-                  placeholder="https://www.youtube.com/watch?v=..."
+                  placeholder="https://www.youtube.com/watch?v=... or https://youtube.com/shorts/..."
                   className="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
                 {formData.videoUrl && !extractYouTubeId(formData.videoUrl) && (
                   <p className="mt-1 text-xs text-red-600">
-                    Please enter a valid YouTube URL
+                    Please enter a valid YouTube URL (regular video or Shorts)
                   </p>
                 )}
+                <p className="mt-1 text-xs text-gray-500">
+                  Accepts: youtube.com/watch?v=..., youtu.be/...,
+                  youtube.com/shorts/...
+                </p>
               </div>
 
               <div>
