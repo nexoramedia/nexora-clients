@@ -128,7 +128,7 @@ const Video = () => {
   const handleDeleteConfirm = async () => {
     if (videoToDelete) {
       try {
-        await api.delete(`/api/videos/${videoToDelete._id}`);
+        await api.delete(`/api/video-reels/${videoToDelete._id}`);
         setSuccessMessage("Video deleted successfully!");
         fetchVideos();
       } catch (error) {
