@@ -8,42 +8,45 @@ const ProcessSteps = () => {
   const steps = [
     {
       number: "01",
-      title: "Consultation",
-      description: "We discuss your vision, goals, and video requirements.",
+      title: "Channel & Goal Setup",
+      description:
+        "We define your niche, audience, and goals to build a clear content direction that attracts the right viewers.",
       color: "blue",
       pinImage:
         "https://framerusercontent.com/images/ceWoRGcAON0ADKDjPd9HhJlf0h4.png",
     },
     {
       number: "02",
-      title: "Script & Storyboard",
+      title: "Research & Ideas",
       description:
-        "Crafting compelling narratives and visual planning for your story.",
+        "I research your niche, study competitors, and find proven video topics and keywords.",
       color: "purple",
       pinImage:
         "https://framerusercontent.com/images/qfrgnhbit9GLh4NOTnKVvU.png",
     },
     {
       number: "03",
-      title: "Footage Review",
-      description: "Selecting the best shots and organizing your raw footage.",
+      title: "Content Writing",
+      description:
+        "We create clear outlines or scripts so your videos stay focused and deliver real value.",
       color: "blue",
       pinImage:
         "https://framerusercontent.com/images/ceWoRGcAON0ADKDjPd9HhJlf0h4.png",
     },
     {
       number: "04",
-      title: "Editing & Effects",
+      title: "Editing & Thumbnails",
       description:
-        "Professional cutting, transitions, and visual enhancements.",
+        "You record — I handle editing, shorts, and eye-catching thumbnails for max impact.",
       color: "purple",
       pinImage:
         "https://framerusercontent.com/images/qfrgnhbit9GLh4NOTnKVvU.png",
     },
     {
       number: "05",
-      title: "Final Delivery",
-      description: "Quality check and delivering your polished final video.",
+      title: "Upload & SEO",
+      description:
+        "I upload your videos with proper SEO setup — titles, tags, and descriptions to rank higher.",
       color: "blue",
       pinImage:
         "https://framerusercontent.com/images/ceWoRGcAON0ADKDjPd9HhJlf0h4.png",
@@ -421,14 +424,14 @@ const ProcessSteps = () => {
                     06
                   </div>
                   <h2 className="text-2xl font-semibold tracking-tight text-white">
-                    Your Video Partner
+                    Growth & Results
                   </h2>
                   <p className="text-lg font-light leading-relaxed text-gray-300/80 md:text-xl">
-                    Your{" "}
                     <span className="text-[#0084FF] font-semibold">
-                      all in one
+                      We track performance,
                     </span>{" "}
-                    video editing partner for continuous success
+                    improve what’s working, and scale your channel to get more
+                    leads and clients.
                   </p>
                 </div>
               </div>

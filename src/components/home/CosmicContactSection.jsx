@@ -106,7 +106,7 @@ export default function CosmicBookingSection() {
                   </h3>
                   <div className="flex items-center justify-center gap-2 mb-4 text-blue-300">
                     <FaClock className="w-4 h-4" />
-                    <span className="text-base">60 Minutes</span>
+                    <span className="text-base">30 Minutes</span>
                   </div>
                 </div>
 
