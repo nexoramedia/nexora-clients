@@ -2,36 +2,49 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
 
-const PrivateRoute = ({ children, redirectTo = "/*", showLoading = true }) => {
-  const { isAuthenticated, checkAuth, authLoading, getCurrentUser } = useAuth();
+const PrivateRoute = ({ children, redirectTo = "/", showLoading = true }) => {
+  const { isAuthenticated, checkAuth, authLoading, getCurrentUser, logout } =
+    useAuth();
   const [isChecking, setIsChecking] = useState(true);
-  const [hasChecked, setHasChecked] = useState(false);
+  const [hasVerified, setHasVerified] = useState(false);
 
   useEffect(() => {
     const verifyAuthentication = async () => {
-      // Prevent multiple checks
-      if (hasChecked) return;
+      // Prevent multiple verifications
+      if (hasVerified) {
+        return;
+      }
+
+      // If already authenticated, no need to check again
+      if (isAuthenticated) {
+        setIsChecking(false);
+        setHasVerified(true);
+        return;
+      }
 
       const hasLocalAuth = checkAuth();
 
       if (!hasLocalAuth) {
         setIsChecking(false);
-        setHasChecked(true);
+        setHasVerified(true);
         return;
       }
 
       try {
+        // Only call getCurrentUser if we have local auth but not global auth state
         await getCurrentUser();
       } catch (error) {
         console.error("Authentication verification failed:", error);
+        // Logout user if verification fails
+        logout();
       } finally {
         setIsChecking(false);
-        setHasChecked(true);
+        setHasVerified(true);
       }
     };
 
     verifyAuthentication();
-  }, [checkAuth, getCurrentUser, hasChecked]);
+  }, [isAuthenticated, checkAuth, getCurrentUser, logout, hasVerified]);
 
   // Show loading indicator
   if ((authLoading || isChecking) && showLoading) {
@@ -43,8 +56,8 @@ const PrivateRoute = ({ children, redirectTo = "/*", showLoading = true }) => {
     );
   }
 
-  // Redirect if not authenticated
-  if (!isAuthenticated && hasChecked) {
+  // Redirect to home page if not authenticated after checking
+  if (!isAuthenticated && !isChecking && hasVerified) {
     return <Navigate to={redirectTo} replace />;
   }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../hook/useAuth"; // Import useAuth hook
+import { useAuth } from "../../hook/useAuth";
 
 const Settings = () => {
   const [user, setUser] = useState(null);
@@ -21,7 +21,7 @@ const Settings = () => {
     confirmPassword: "",
   });
 
-  // Use auth hook instead of direct api hook
+  // Use auth hook
   const {
     user: authUser,
     setSecurityQuestion,
@@ -31,9 +31,19 @@ const Settings = () => {
     authError,
   } = useAuth();
 
+  // SINGLE useEffect - Use authUser directly
   useEffect(() => {
-    fetchCurrentUser();
-  }, []);
+    if (authUser) {
+      setUser(authUser);
+      // Pre-fill security question if exists
+      if (authUser.securityQuestion?.question) {
+        setSecurityForm((prev) => ({
+          ...prev,
+          question: authUser.securityQuestion.question,
+        }));
+      }
+    }
+  }, [authUser]);
 
   // Auto-hide messages after 3 seconds
   useEffect(() => {
@@ -46,12 +56,11 @@ const Settings = () => {
     }
   }, [successMessage, errorMessage]);
 
-  const fetchCurrentUser = async () => {
+  const refreshUserData = async () => {
     try {
       const response = await getCurrentUser();
       if (response?.status === "success") {
         setUser(response.data.user);
-        // Pre-fill security question if exists
         if (response.data.user.securityQuestion?.question) {
           setSecurityForm((prev) => ({
             ...prev,
@@ -60,7 +69,7 @@ const Settings = () => {
         }
       }
     } catch (error) {
-      console.error("Error fetching user:", error);
+      console.error("Error refreshing user:", error);
     }
   };
 
@@ -107,11 +116,13 @@ const Settings = () => {
         );
 
         setSecurityForm({
-          question: user?.securityQuestion?.question || "",
+          question: securityForm.question, // Keep the question, clear others
           answer: "",
           currentPassword: "",
         });
-        fetchCurrentUser(); // Refresh user data
+
+        // Refresh user data after successful update
+        await refreshUserData();
       } else {
         setErrorMessage(response.message || "Failed to set security question");
       }
