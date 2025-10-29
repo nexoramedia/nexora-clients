@@ -83,7 +83,6 @@ const StatsSection = memo(() => {
       className="grid w-full grid-cols-1 gap-16 px-4 pb-20 mx-auto md:grid-cols-3 mt-25 max-w-7xl"
       style={{
         color: "rgba(255, 255, 255, 0.6)",
-        fontFamily: "Poppins, sans-serif",
       }}
     >
       {stats.map((stat) => (
@@ -152,15 +151,6 @@ const StatsSection = memo(() => {
           </div>
         </motion.div>
       ))}
-
-      {/* Global Styles for custom fonts */}
-      <style jsx>{`
-        @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Poppins:wght@400;500;600&display=swap");
-
-        .font-syne {
-          font-family: "Syne", sans-serif;
-        }
-      `}</style>
     </section>
   );
 });
