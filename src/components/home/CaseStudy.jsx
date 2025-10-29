@@ -99,7 +99,7 @@ export default function CaseStudyCardLayout() {
             transition={{ delay: 0.1 }}
             className="mb-6 text-2xl font-bold leading-tight md:text-3xl lg:text-4xl"
           >
-            "Showing how editing, SEO, and strategy turn channels into clients."
+            Showing how editing, SEO, and strategy turn channels into clients.
           </motion.h2>
         </div>
 
