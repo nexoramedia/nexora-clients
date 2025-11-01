@@ -17,7 +17,7 @@ import {
   HiArrowRight,
   HiPlay,
 } from "react-icons/hi";
-import { useVideo } from "../../hook/useVideo"; // Import your video hook
+import { useVideo } from "../../hook/useVideo";
 
 import bg from "../../assets/bg.jpg";
 
@@ -45,7 +45,7 @@ const isYouTubeUrl = (url) => {
   return url && (url.includes("youtube.com") || url.includes("youtu.be"));
 };
 
-// Enhanced Video Player with your desired style
+// YouTube-style Video Player
 const VideoPlayer = memo(() => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -54,8 +54,10 @@ const VideoPlayer = memo(() => {
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [showCentralButton, setShowCentralButton] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(false);
 
-  // Use your video hook to fetch introduction videos - ALWAYS CALL HOOKS UNCONDITIONALLY
+  // Use your video hook to fetch introduction videos
   const { videos, loading, error } = useVideo("introduction");
 
   // Get the first introduction video
@@ -74,16 +76,41 @@ const VideoPlayer = memo(() => {
     return introductionVideo ? isYouTubeUrl(introductionVideo.videoUrl) : false;
   }, [introductionVideo]);
 
+  // Handle fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  // Auto-hide controls
+  useEffect(() => {
+    let hideTimeout;
+    if (videoPlaying && showControls) {
+      hideTimeout = setTimeout(() => {
+        setShowControls(false);
+      }, 3000);
+    }
+    return () => clearTimeout(hideTimeout);
+  }, [videoPlaying, showControls]);
+
   const handlePlayPause = useCallback(() => {
     if (videoRef.current) {
       if (videoRef.current.paused) {
         videoRef.current.play();
         setVideoPlaying(true);
         setShowCentralButton(false);
+        setShowControls(true);
       } else {
         videoRef.current.pause();
         setVideoPlaying(false);
         setShowCentralButton(true);
+        setShowControls(true);
       }
     }
   }, []);
@@ -94,6 +121,7 @@ const VideoPlayer = memo(() => {
       if (videoRef.current) {
         videoRef.current.muted = !videoRef.current.muted;
         setIsMuted(!isMuted);
+        setShowControls(true);
       }
     },
     [isMuted]
@@ -111,6 +139,7 @@ const VideoPlayer = memo(() => {
     setVideoPlaying(false);
     setProgress(0);
     setShowCentralButton(true);
+    setShowControls(true);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
     }
@@ -126,6 +155,7 @@ const VideoPlayer = memo(() => {
       const percent = (e.clientX - rect.left) / rect.width;
       videoRef.current.currentTime = percent * videoRef.current.duration;
       setProgress(percent * 100);
+      setShowControls(true);
     }
   }, []);
 
@@ -137,6 +167,11 @@ const VideoPlayer = memo(() => {
         containerRef.current.requestFullscreen();
       }
     }
+    setShowControls(true);
+  }, []);
+
+  const toggleControls = useCallback(() => {
+    setShowControls((prev) => !prev);
   }, []);
 
   // Fallback video source
@@ -160,31 +195,16 @@ const VideoPlayer = memo(() => {
     []
   );
 
-  const buttonTransition = useMemo(
+  // YouTube-like aspect ratio (16:9)
+  const youtubeAspectRatio = useMemo(
     () => ({
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
+      container: "w-full max-w-4xl mx-auto mb-8 px-4",
+      wrapper: "relative w-full",
+      player: {
+        base: "relative w-full overflow-hidden bg-black cursor-pointer rounded-xl",
+        aspect: "aspect-video", // This gives 16:9 aspect ratio
+      },
     }),
-    []
-  );
-
-  const glowRingTransitions = useMemo(
-    () => [
-      {
-        animate: { scale: [1, 1.5, 1], opacity: [0.3, 0.5, 0.3] },
-        transition: { duration: 2, repeat: Infinity, repeatType: "loop" },
-      },
-      {
-        animate: { scale: [1, 1.8, 1], opacity: [0.2, 0.4, 0.2] },
-        transition: {
-          duration: 2.5,
-          repeat: Infinity,
-          repeatType: "loop",
-          delay: 0.5,
-        },
-      },
-    ],
     []
   );
 
@@ -192,34 +212,21 @@ const VideoPlayer = memo(() => {
   const renderYouTubePlayer = () => (
     <>
       {/* YouTube Embed */}
-      <div className="w-full h-full">
+      <div className="absolute inset-0 w-full h-full">
         <iframe
           src={youtubeEmbedUrl}
-          className="w-full h-full"
+          className="absolute inset-0 w-full h-full"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           title={"Introduction Video"}
           onLoad={() => setIsLoading(false)}
-          style={{
-            display: "block",
-            border: "none",
-            borderRadius: "12px",
-          }}
         />
       </div>
-
-      {/* YouTube Badge */}
-      {isYouTube && (
-        <div className="absolute top-4 left-4 bg-black/80 px-4 py-2 rounded-lg text-sm font-mono z-20 backdrop-blur-sm text-[#0084FF] border border-[#0084FF]/50 flex items-center gap-2">
-          <FaVideo className="text-[#0084FF]" />
-          <span> INTRODUCTION_VIDEO</span>
-        </div>
-      )}
     </>
   );
 
-  // Render regular video player
+  // Render regular video player with YouTube-like controls
   const renderRegularVideoPlayer = () => (
     <>
       <video
@@ -227,12 +234,14 @@ const VideoPlayer = memo(() => {
         muted={isMuted}
         loop
         playsInline
-        className="object-cover w-full h-full"
+        className="absolute inset-0 object-cover w-full h-full"
         poster={videoPoster}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleVideoEnd}
         onLoadedData={handleLoadedData}
         onClick={handlePlayPause}
+        onMouseEnter={() => setShowControls(true)}
+        onMouseMove={() => setShowControls(true)}
       >
         <source
           src={introductionVideo?.videoUrl || fallbackVideoSource}
@@ -241,16 +250,103 @@ const VideoPlayer = memo(() => {
         Your browser does not support the video tag.
       </video>
 
-      {/* Video Title */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.6 }}
-        className="absolute top-4 left-4 bg-black/80 px-4 py-2 rounded-lg text-sm font-mono z-20 backdrop-blur-sm text-[#0084FF] border border-[#0084FF]/50 flex items-center gap-2"
-      >
-        <FaVideo className="text-[#0084FF]" />
-        <span>{introductionVideo?.title || "INTRODUCTION_2025.MP4"}</span>
-      </motion.div>
+      {/* YouTube-style Controls */}
+      <AnimatePresence>
+        {showControls && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute bottom-0 left-0 right-0 z-20 p-3 bg-gradient-to-t from-black/80 to-transparent"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Progress Bar */}
+            <div
+              className="relative w-full h-1 mb-4 rounded-full cursor-pointer bg-white/30 group"
+              onClick={seekVideo}
+            >
+              <div
+                className="absolute inset-0 h-full bg-red-600 rounded-full"
+                style={{ width: `${progress}%` }}
+              />
+              <div
+                className="absolute w-3 h-3 -translate-y-1 -translate-x-1.5 bg-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ left: `${progress}%` }}
+              />
+            </div>
+
+            {/* Control Buttons */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                {/* Play/Pause */}
+                <button
+                  onClick={handlePlayPause}
+                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
+                >
+                  {videoPlaying ? (
+                    <FaPause className="w-4 h-4" />
+                  ) : (
+                    <FaPlay className="w-4 h-4" />
+                  )}
+                </button>
+
+                {/* Volume */}
+                <button
+                  onClick={toggleMute}
+                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
+                >
+                  {isMuted ? (
+                    <FaVolumeMute className="w-4 h-4" />
+                  ) : (
+                    <FaVolumeUp className="w-4 h-4" />
+                  )}
+                </button>
+
+                {/* Time Display */}
+                <div className="font-mono text-xs text-white">0:00 / 0:00</div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                {/* Settings would go here */}
+
+                {/* Fullscreen */}
+                <button
+                  onClick={handleFullscreen}
+                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
+                >
+                  <FaExpand className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Central Play Button */}
+      <AnimatePresence>
+        {showCentralButton && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="absolute inset-0 z-10 flex items-center justify-center cursor-pointer"
+            onClick={handlePlayPause}
+          >
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="relative"
+            >
+              <div className="relative flex items-center justify-center w-20 h-20 bg-red-600 rounded-full shadow-2xl">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
+                <FaPlay className="w-8 h-8 ml-1 text-white" />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 
@@ -259,119 +355,41 @@ const VideoPlayer = memo(() => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={videoTransition}
-      className="relative w-full max-w-4xl px-4 mx-auto mb-8"
+      className={youtubeAspectRatio.container}
     >
-      <motion.div
-        ref={containerRef}
-        className="w-full h-[400px] lg:h-[500px] relative overflow-hidden rounded-2xl border border-[#0084FF]/40 shadow-2xl shadow-[#0084FF]/30 bg-black/80 backdrop-blur-sm cursor-pointer"
-        whileHover={{
-          scale: 1.02,
-          borderColor: "rgba(0, 132, 255, 0.6)",
-          transition: { duration: 0.3 },
-        }}
-        onClick={youtubeEmbedUrl ? undefined : handlePlayPause}
-      >
-        {/* Loading State */}
-        {isLoading && (
-          <div className="absolute inset-0 z-30 flex items-center justify-center bg-gray-900">
-            <div className="w-8 h-8 border-2 border-[#0084FF] border-t-transparent rounded-full animate-spin" />
-          </div>
-        )}
-
-        {/* Video Content */}
-        {youtubeEmbedUrl ? renderYouTubePlayer() : renderRegularVideoPlayer()}
-
-        {/* Minimal Gradient Overlays */}
-        <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <div className="absolute top-0 left-0 z-10 w-full h-20 pointer-events-none bg-gradient-to-b from-black/50 to-transparent" />
-
-        {/* Central Play Button - Only show for non-YouTube videos or when not playing */}
-        {!youtubeEmbedUrl && (
-          <AnimatePresence>
-            {showCentralButton && (
-              <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-                transition={buttonTransition}
-                className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="relative"
-                >
-                  {/* Pulsing Glow Rings */}
-                  {glowRingTransitions.map((ring, index) => (
-                    <motion.div
-                      key={index}
-                      className="absolute inset-0 rounded-full bg-[#0084FF]/30"
-                      animate={ring.animate}
-                      transition={ring.transition}
-                    />
-                  ))}
-
-                  {/* Main Button */}
-                  <div className="relative w-24 h-24 bg-gradient-to-br from-[#0066CC] via-[#0084FF] to-[#0099FF] rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-white/10">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/10 to-transparent" />
-                    <HiPlay className="w-10 h-10 text-white" />
-                  </div>
-
-                  {/* Text Label */}
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="absolute flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transform -translate-x-1/2 border rounded-full -bottom-12 left-1/2 bg-black/70 backdrop-blur-sm border-white/10"
-                  >
-                    <HiCursorClick className="w-4 h-4" />
-                    Play
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        )}
-
-        {/* Bottom Controls - Only for non-YouTube videos */}
-        {!youtubeEmbedUrl && (
-          <div className="absolute z-20 flex items-center gap-3 pointer-events-none bottom-4 left-4 right-4">
-            {/* Progress Bar */}
-            <div
-              className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden cursor-pointer pointer-events-auto"
-              onClick={seekVideo}
-            >
-              <motion.div
-                className="h-full bg-gradient-to-r from-[#0084FF] to-[#0066CC]"
-                initial={{ width: "0%" }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.1 }}
-              />
+      <div className={youtubeAspectRatio.wrapper}>
+        <motion.div
+          ref={containerRef}
+          className={`${youtubeAspectRatio.player.base} ${youtubeAspectRatio.player.aspect}`}
+          whileHover={{
+            scale: isFullscreen ? 1 : 1.01,
+            transition: { duration: 0.3 },
+          }}
+          onMouseEnter={() => !videoPlaying && setShowControls(true)}
+          onMouseLeave={() => !videoPlaying && setShowControls(false)}
+        >
+          {/* Loading State */}
+          {isLoading && (
+            <div className="absolute inset-0 z-30 flex items-center justify-center bg-gray-900">
+              <div className="w-8 h-8 border-2 border-red-600 rounded-full border-t-transparent animate-spin" />
             </div>
+          )}
 
-            {/* Control Buttons */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleMute}
-                className="flex items-center justify-center w-8 h-8 text-white transition-colors border rounded-full pointer-events-auto bg-black/60 border-white/20 hover:bg-black/80"
-              >
-                {isMuted ? (
-                  <FaVolumeMute className="w-3 h-3" />
-                ) : (
-                  <FaVolumeUp className="w-3 h-3" />
-                )}
-              </button>
+          {/* Video Content */}
+          {youtubeEmbedUrl ? renderYouTubePlayer() : renderRegularVideoPlayer()}
 
-              <button
-                onClick={handleFullscreen}
-                className="flex items-center justify-center w-8 h-8 text-white transition-colors border rounded-full pointer-events-auto bg-black/60 border-white/20 hover:bg-black/80"
-              >
-                <FaExpand className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-        )}
-      </motion.div>
+          {/* Video Title Badge */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.6 }}
+            className="absolute top-3 left-3 bg-black/80 px-3 py-1.5 rounded-lg text-xs font-mono z-20 backdrop-blur-sm text-blue-600 border border-blue-600/50 flex items-center gap-2"
+          >
+            <FaVideo className="w-3 h-3 text-blue-600" />
+            <span>{"INTRODUCTION_2025.MP4"}</span>
+          </motion.div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 });
@@ -445,7 +463,7 @@ const UserAvatars = memo(() => {
             className="relative group"
           >
             <div
-              className={`w-12 h-12 rounded-full border-2 border-white/20 ${user.bg} flex items-center justify-center text-white text-xs font-bold shadow-lg overflow-hidden`}
+              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white/20 ${user.bg} flex items-center justify-center text-white text-xs font-bold shadow-lg overflow-hidden`}
             >
               <img
                 src={user.profile}
@@ -666,7 +684,7 @@ const HeroSection = memo(() => {
             onClick={scrollToContact}
             whileHover={ctaButtonHover}
             whileTap={{ scale: 0.95 }}
-            className="relative px-10 py-4 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-xl text-white font-bold text-lg hover:shadow-2xl transition-all group overflow-hidden flex items-center gap-3"
+            className="relative px-8 py-3 sm:px-10 sm:py-4 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-xl text-white font-bold text-base sm:text-lg hover:shadow-2xl transition-all group overflow-hidden flex items-center gap-3"
           >
             <span className="relative z-10 flex items-center">
               <FaRocket className="w-4 h-4 mr-2" />
@@ -688,7 +706,7 @@ const HeroSection = memo(() => {
           </motion.button>
         </motion.div>
 
-        {/* Enhanced Video Player with your desired style */}
+        {/* YouTube-style Video Player */}
         <VideoPlayer />
 
         {/* Enhanced Scroll Indicator */}

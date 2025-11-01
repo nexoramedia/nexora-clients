@@ -304,19 +304,12 @@ const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
 
   try {
-    // Extract video ID from various YouTube URL formats
-    // Supports:
-    // - youtu.be/Hjj5i_w6Iog (Shorts style)
-    // - youtube.com/shorts/Hjj5i_w6Iog (Shorts)
-    // - youtube.com/watch?v=Hjj5i_w6Iog (Regular)
     const regex =
       /(?:youtube\.com\/(?:shorts\/|watch\?v=)|youtu\.be\/)([^"&?\/\s]{11})/;
     const match = url.match(regex);
 
     if (match && match[1]) {
       const videoId = match[1];
-      // Use the same embed URL format for both Shorts and regular videos
-      // YouTube automatically handles the Shorts interface in embed
       return `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0`;
     }
   } catch (error) {
@@ -330,17 +323,13 @@ const isYouTubeShorts = (url) => {
   return url && (url.includes("/shorts/") || url.includes("youtu.be/"));
 };
 
-// Simple Customer Review Card Component
+// Redesigned Customer Review Card Component - Framer Style
 const CustomerReviewCard = memo(({ review, isActive }) => {
-  // Get initials from name
-  const getInitials = (name) => {
-    return name
-      .split(" ")
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
   const youtubeEmbedUrl = useMemo(() => {
     return getYouTubeEmbedUrl(review.videoUrl);
@@ -350,9 +339,14 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
     return isYouTubeShorts(review.videoUrl);
   }, [review.videoUrl]);
 
+  const handlePlayClick = () => {
+    setIsPlaying(true);
+  };
+
   return (
     <motion.div
-      className={`bg-gradient-to-br from-gray-900 to-black backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden hover:border-gray-700 transition-all duration-500 ${
+      ref={ref}
+      className={`bg-[#131415] rounded-[34px] border border-gray-800 overflow-hidden transition-all duration-500 ${
         isActive ? "scale-100 opacity-100" : "scale-95 opacity-60"
       }`}
       whileHover={{
@@ -369,52 +363,73 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
         damping: 25,
       }}
     >
-      <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
-        {/* Video Section - Optimized for Shorts */}
-        <div className="relative flex items-center justify-center p-4">
-          <motion.div
-            className="relative overflow-hidden bg-black border-2 border-gray-700 rounded-2xl"
-            style={{
-              width: "260px",
-              height: "460px",
-              // Force vertical aspect ratio for Shorts-like appearance
-              aspectRatio: "9/16",
-            }}
-            whileHover={{
-              borderColor: "rgba(0, 132, 255, 0.5)",
-              transition: { duration: 0.3 },
-            }}
-          >
-            {/* Direct YouTube Embed - Loads directly */}
-            {review.videoUrl && youtubeEmbedUrl ? (
-              <div className="w-full h-full">
-                <iframe
-                  src={youtubeEmbedUrl}
-                  className="w-full h-full"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title={`${review.name}'s YouTube ${
-                    isShorts ? "Short" : "Video"
-                  }`}
-                  // Important for mobile responsiveness
-                  style={{
-                    display: "block",
-                    border: "none",
-                    borderRadius: "12px",
-                  }}
-                />
-              </div>
-            ) : (
-              // Simple fallback when no video URL
-              <div className="flex flex-col items-center justify-center w-full h-full p-4 text-center text-white bg-gradient-to-br from-gray-900 to-black">
-                <FaPlay className="w-10 h-10 mb-3 text-[#0084FF]" />
-                <p className="text-xs font-semibold">Video Content</p>
-                {isShorts && (
-                  <p className="mt-1 text-xs text-gray-400">YouTube Short</p>
-                )}
-              </div>
-            )}
+      <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-2">
+        {/* Video Section - Framer Style */}
+        <div className="relative">
+          <div className="relative rounded-[22px] overflow-hidden bg-black aspect-[9/16] max-w-[260px] mx-auto">
+            {/* Video Container */}
+            <div className="relative w-full h-full">
+              {review.videoUrl && youtubeEmbedUrl ? (
+                <div className="w-full h-full">
+                  <iframe
+                    src={youtubeEmbedUrl}
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={`${review.name}'s YouTube ${
+                      isShorts ? "Short" : "Video"
+                    }`}
+                    style={{
+                      display: "block",
+                      border: "none",
+                      borderRadius: "12px",
+                    }}
+                  />
+                </div>
+              ) : (
+                // Fallback video container with play button
+                <div className="relative w-full h-full bg-gradient-to-br from-gray-900 to-black">
+                  {/* Play Button Overlay */}
+                  {!isPlaying && (
+                    <motion.div
+                      className="absolute inset-0 z-10 flex items-center justify-center"
+                      initial={{ opacity: 1 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <motion.button
+                        onClick={handlePlayClick}
+                        className="backdrop-blur-[25px] bg-white/7 rounded-full p-4 border border-white/10 hover:bg-white/10 transition-all duration-300"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="flex items-center gap-2 px-4 py-2">
+                          <div className="flex items-center justify-center w-6 h-6">
+                            <FaPlay className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-sm font-medium text-white">
+                            Play
+                          </span>
+                        </div>
+                      </motion.button>
+                    </motion.div>
+                  )}
+
+                  {/* Video Placeholder */}
+                  <div className="flex flex-col items-center justify-center w-full h-full p-4 text-center text-white">
+                    <FaVideo className="w-8 h-8 mb-3 text-gray-600" />
+                    <p className="text-sm font-semibold text-gray-400">
+                      Video Content
+                    </p>
+                    {isShorts && (
+                      <p className="mt-1 text-xs text-gray-500">
+                        YouTube Short
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* YouTube Shorts Badge */}
             {isShorts && (
@@ -430,55 +445,16 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
                 </div>
               </motion.div>
             )}
-          </motion.div>
+          </div>
         </div>
 
-        {/* Compact Review Content */}
-        <div className="flex flex-col justify-center p-4">
-          {/* Customer Info - Compact */}
-          <motion.div
-            className="flex items-center gap-3 mb-3"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{
-              duration: 0.5,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            {review.profileImage ? (
-              <motion.img
-                src={review.profileImage}
-                alt={review.name}
-                className="w-8 h-8 rounded-lg border border-[#0084FF]/30"
-                whileHover={{
-                  scale: 1.05,
-                  rotate: 5,
-                  transition: {
-                    duration: 0.3,
-                  },
-                }}
-              />
-            ) : (
-              <motion.div
-                className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0084FF] to-[#0066CC] flex items-center justify-center text-white font-bold text-xs border border-[#0084FF]/30"
-                whileHover={{
-                  scale: 1.05,
-                  rotate: 5,
-                  transition: {
-                    duration: 0.3,
-                  },
-                }}
-              >
-                {getInitials(review.name)}
-              </motion.div>
-            )}
-            <div>
-              <h3 className="text-sm font-bold text-white mb-0.5">
-                {review.name}
-              </h3>
-              <p className="text-xs text-gray-400">{review.position}</p>
-              <div className="flex items-center gap-0.5 mt-0.5">
+        {/* Review Content - Framer Style */}
+        <div className="flex flex-col justify-center space-y-6">
+          {/* Rating and Name */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white">{review.name}</h3>
+              <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <motion.div
                     key={i}
@@ -487,94 +463,83 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
                       transition: { duration: 0.2 },
                     }}
                   >
-                    <FaStar className="w-2 h-2 text-yellow-400 fill-current" />
+                    <svg
+                      className="w-4 h-4 text-[#009FF6] fill-current"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
                   </motion.div>
                 ))}
               </div>
             </div>
-          </motion.div>
 
-          {/* Review Text - Compact */}
-          <motion.blockquote
-            className="mb-3 text-xs leading-relaxed text-gray-200"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{
-              duration: 0.6,
-              delay: 0.3,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            {review.quote}
-          </motion.blockquote>
+            {/* Review Text */}
+            <motion.blockquote
+              className="text-[15px] leading-relaxed text-[#9BA1A5] font-light"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              {review.quote}
+            </motion.blockquote>
+          </div>
 
-          {/* Compact Metrics */}
-          <motion.div
-            className="flex items-center gap-2 py-2 border-t border-gray-800"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.6,
-              delay: 0.4,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            {/* Views */}
+          {/* Results Metrics - Framer Style */}
+          <div className="flex items-center gap-4 pt-4 border-t border-gray-800">
+            {/* Views Result */}
             <motion.div
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-3"
               whileHover={{
                 scale: 1.05,
                 transition: { duration: 0.2 },
               }}
             >
-              <div className="w-7 h-7 rounded-md bg-[#0084FF]/10 flex items-center justify-center border border-[#0084FF]/20">
-                <FaEye className="w-3 h-3 text-[#0084FF]" />
+              <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20 rotate-[-90deg]">
+                <svg
+                  className="w-4 h-4 text-green-400"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
               </div>
               <div>
-                <div className="text-xs font-bold text-white">
+                <div className="text-sm font-medium text-[#9BA1A5]">
                   {review.views}
                 </div>
-                <div className="text-xs text-gray-400">Views</div>
               </div>
             </motion.div>
 
-            {/* Subscribers */}
+            {/* Subscribers Result */}
             <motion.div
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-3"
               whileHover={{
                 scale: 1.05,
                 transition: { duration: 0.2 },
               }}
             >
-              <div className="flex items-center justify-center border rounded-md w-7 h-7 bg-green-500/10 border-green-500/20">
-                <FaUserPlus className="w-3 h-3 text-green-400" />
+              <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center border border-orange-500/20 rotate-[-90deg]">
+                <svg
+                  className="w-4 h-4 text-orange-500"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
               </div>
               <div>
-                <div className="text-xs font-bold text-white">
+                <div className="text-sm font-medium text-[#9BA1A5]">
                   {review.subscribers}
                 </div>
-                <div className="text-xs text-gray-400">Subscribers</div>
               </div>
             </motion.div>
-          </motion.div>
-
-          {/* Timeline */}
-          <motion.div
-            className="flex items-center justify-between mt-2 text-xs text-gray-500"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{
-              duration: 0.6,
-              delay: 0.6,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            <span>Joined: {review.joined}</span>
-            <span>Results: {review.results}</span>
-          </motion.div>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -593,21 +558,21 @@ const CustomerReviewsCarousel = memo(() => {
   // Use the custom hook to fetch reviews
   const { reviews, loading, error } = useReviews();
 
-  // Fallback data with your actual YouTube Shorts URL
+  // Enhanced fallback data with proper structure
   const fallbackReviews = useMemo(
     () => [
       {
         id: 1,
-        name: "John Smith",
+        name: "Manny Calvo",
         profileImage: "",
-        position: "Creative Agency",
+        position: "Content Creator",
         quote:
-          "This service completely transformed our content strategy. We went from struggling to get views to consistently going viral!",
-        views: "1M+",
-        subscribers: "50K+",
+          "Unforgettable video experience! Each edit was a masterpiece, and the seamless transitions made the final product even more special. Every frame told a story, creating a lasting impression",
+        views: "100x Views",
+        subscribers: "1M+ Subscriber",
         joined: "Mar 2024",
         results: "3 months",
-        videoUrl: "https://youtu.be/Hjj5i_w6Iog?si=0sspqt-0XtpjIUZR", // Your YouTube Shorts URL
+        videoUrl: "https://youtu.be/Hjj5i_w6Iog?si=0sspqt-0XtpjIUZR",
         thumbnailUrl: "",
       },
       {
@@ -616,12 +581,12 @@ const CustomerReviewsCarousel = memo(() => {
         profileImage: "",
         position: "Media Company",
         quote:
-          "The viral editing techniques helped us grow our audience exponentially. Best investment we've made!",
-        views: "2.5M+",
-        subscribers: "75K+",
+          "The viral editing techniques helped us grow our audience exponentially. Best investment we've made! Our engagement increased by 300% in just two months.",
+        views: "2.5M+ Views",
+        subscribers: "75K+ Subscribers",
         joined: "Feb 2024",
         results: "4 months",
-        videoUrl: "https://youtube.com/shorts/xyz789short", // Example YouTube Shorts URL
+        videoUrl: "https://youtube.com/shorts/xyz789short",
         thumbnailUrl: "",
       },
       {
@@ -630,20 +595,71 @@ const CustomerReviewsCarousel = memo(() => {
         profileImage: "",
         position: "Tech Startup",
         quote:
-          "Our engagement rates skyrocketed after implementing their strategies. Absolutely phenomenal results!",
-        views: "3.2M+",
-        subscribers: "120K+",
+          "Our engagement rates skyrocketed after implementing their strategies. Absolutely phenomenal results! We went from 1K to 50K followers in 30 days.",
+        views: "3.2M+ Views",
+        subscribers: "120K+ Subscribers",
         joined: "Jan 2024",
         results: "5 months",
-        videoUrl: "https://www.youtube.com/watch?v=regularvideoid", // Example regular YouTube URL
+        videoUrl: "https://www.youtube.com/watch?v=regularvideoid",
+        thumbnailUrl: "",
+      },
+      {
+        id: 4,
+        name: "Alex Rodriguez",
+        profileImage: "",
+        position: "E-commerce Brand",
+        quote:
+          "The content strategy transformed our business. We're now getting consistent viral hits and our sales have increased by 400% month over month.",
+        views: "5M+ Views",
+        subscribers: "200K+ Subscribers",
+        joined: "Dec 2023",
+        results: "6 months",
+        videoUrl: "https://youtu.be/anothershortsid",
         thumbnailUrl: "",
       },
     ],
     []
   );
 
-  // Use fetched reviews or fallback
-  const displayReviews = reviews.length > 0 ? reviews : fallbackReviews;
+  // Use fetched reviews or fallback - handle both array structures
+  const displayReviews = useMemo(() => {
+    if (reviews && reviews.length > 0) {
+      return reviews.map((review) => ({
+        id: review._id || review.id,
+        name: review.name || review.customerName || "Customer",
+        profileImage: review.profileImage || review.avatar || "",
+        position: review.position || review.company || "Client",
+        quote:
+          review.quote ||
+          review.testimonial ||
+          review.content ||
+          "Great service!",
+        views: review.views || review.metrics?.views || "1M+ Views",
+        subscribers:
+          review.subscribers ||
+          review.metrics?.subscribers ||
+          "50K+ Subscribers",
+        joined: review.joined || review.startDate || "2024",
+        results: review.results || review.duration || "3 months",
+        videoUrl: review.videoUrl || review.video || "",
+        thumbnailUrl: review.thumbnailUrl || review.thumbnail || "",
+      }));
+    }
+    return fallbackReviews;
+  }, [reviews, fallbackReviews]);
+
+  // Auto-advance slider
+  React.useEffect(() => {
+    if (displayReviews.length <= 1) return;
+
+    const interval = setInterval(() => {
+      if (!isAnimating) {
+        setCurrentIndex((prev) => (prev + 1) % displayReviews.length);
+      }
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [displayReviews.length, isAnimating]);
 
   const nextSlide = useCallback(() => {
     if (isAnimating || displayReviews.length === 0) return;
@@ -671,39 +687,53 @@ const CustomerReviewsCarousel = memo(() => {
     [isAnimating, displayReviews.length]
   );
 
-  // Show loading state
+  // Enhanced loading state
   if (loading) {
     return (
-      <div className="flex items-center justify-center max-w-6xl py-16 mx-auto">
+      <div className="flex items-center justify-center max-w-4xl py-16 mx-auto">
         <motion.div
           className="text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
           <motion.div
-            className="w-12 h-12 mx-auto mb-3 border-4 border-[#0084FF] border-t-transparent rounded-full"
+            className="w-12 h-12 mx-auto mb-4 border-4 border-[#0084FF] border-t-transparent rounded-full"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
           <p className="text-sm text-gray-400">Loading success stories...</p>
+          <motion.p
+            className="mt-2 text-xs text-gray-500"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Preparing amazing results for you
+          </motion.p>
         </motion.div>
       </div>
     );
   }
 
-  // Show error state
+  // Enhanced error state
   if (error && reviews.length === 0) {
     return (
-      <div className="max-w-6xl mx-auto text-center">
-        <p className="text-sm text-gray-400">Showing demo success stories</p>
-      </div>
+      <motion.div
+        className="max-w-4xl mx-auto text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="p-6 border rounded-2xl bg-red-500/10 border-red-500/20">
+          <p className="mb-2 text-sm text-red-400">Unable to load reviews</p>
+          <p className="text-xs text-gray-400">Showing demo success stories</p>
+        </div>
+      </motion.div>
     );
   }
 
   return (
     <motion.div
       ref={ref}
-      className="max-w-6xl mx-auto"
+      className="max-w-4xl mx-auto"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{
@@ -715,7 +745,7 @@ const CustomerReviewsCarousel = memo(() => {
     >
       {/* Responsive Section Title */}
       <motion.div
-        className="mb-8 text-center"
+        className="mb-12 text-center"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{
@@ -725,26 +755,27 @@ const CustomerReviewsCarousel = memo(() => {
         }}
         viewport={{ once: true, margin: "-50px" }}
       >
-        <h2 className="mb-3 text-xl font-bold text-white sm:text-2xl md:text-3xl">
+        <h2 className="mb-4 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
           Hear what they're Saying about us
         </h2>
-        <p className="max-w-2xl px-4 mx-auto text-xs text-gray-400 sm:text-sm">
-          See how businesses like yours achieved incredible results with our
+        <p className="max-w-2xl px-4 mx-auto text-sm text-gray-400 sm:text-base">
+          See how businesses like yours achieved incredible growth with our
           viral content strategies
         </p>
       </motion.div>
 
       {/* Carousel Container */}
       <div className="relative">
-        {/* Navigation Buttons - Only show if there are reviews */}
+        {/* Navigation Buttons - Only show if there are multiple reviews */}
         {displayReviews.length > 1 && (
           <>
             <motion.button
               onClick={prevSlide}
-              className="absolute z-20 flex items-center justify-center w-8 h-8 transition-all duration-300 -translate-y-1/2 border border-gray-600 rounded-lg left-2 top-1/2 bg-black/50 hover:bg-black/70"
+              className="absolute z-20 flex items-center justify-center w-10 h-10 transition-all duration-300 -translate-y-1/2 border border-gray-600 rounded-xl left-4 top-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm"
               whileHover={{
                 scale: 1.1,
-                backgroundColor: "rgba(0,0,0,0.7)",
+                backgroundColor: "rgba(0,0,0,0.8)",
+                borderColor: "rgba(0, 132, 255, 0.5)",
                 transition: {
                   duration: 0.3,
                   ease: [0.25, 0.46, 0.45, 0.94],
@@ -752,15 +783,16 @@ const CustomerReviewsCarousel = memo(() => {
               }}
               whileTap={{ scale: 0.9 }}
             >
-              <FaChevronLeft className="w-3 h-3 text-white" />
+              <FaChevronLeft className="w-4 h-4 text-white" />
             </motion.button>
 
             <motion.button
               onClick={nextSlide}
-              className="absolute z-20 flex items-center justify-center w-8 h-8 transition-all duration-300 -translate-y-1/2 border border-gray-600 rounded-lg right-2 top-1/2 bg-black/50 hover:bg-black/70"
+              className="absolute z-20 flex items-center justify-center w-10 h-10 transition-all duration-300 -translate-y-1/2 border border-gray-600 rounded-xl right-4 top-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm"
               whileHover={{
                 scale: 1.1,
-                backgroundColor: "rgba(0,0,0,0.7)",
+                backgroundColor: "rgba(0,0,0,0.8)",
+                borderColor: "rgba(0, 132, 255, 0.5)",
                 transition: {
                   duration: 0.3,
                   ease: [0.25, 0.46, 0.45, 0.94],
@@ -768,13 +800,13 @@ const CustomerReviewsCarousel = memo(() => {
               }}
               whileTap={{ scale: 0.9 }}
             >
-              <FaChevronRight className="w-3 h-3 text-white" />
+              <FaChevronRight className="w-4 h-4 text-white" />
             </motion.button>
           </>
         )}
 
         {/* Carousel Slides */}
-        <div className="overflow-hidden">
+        <div className="overflow-hidden rounded-3xl">
           <motion.div
             className="flex"
             animate={{ x: `-${currentIndex * 100}%` }}
@@ -786,10 +818,7 @@ const CustomerReviewsCarousel = memo(() => {
             }}
           >
             {displayReviews.map((review, index) => (
-              <div
-                key={review._id || review.id}
-                className="flex-shrink-0 w-full px-3"
-              >
+              <div key={review.id} className="flex-shrink-0 w-full px-4">
                 <CustomerReviewCard
                   review={review}
                   isActive={index === currentIndex}
@@ -801,14 +830,14 @@ const CustomerReviewsCarousel = memo(() => {
 
         {/* Enhanced Dots Indicator - Only show if there are multiple reviews */}
         {displayReviews.length > 1 && (
-          <div className="flex justify-center mt-6 space-x-1.5">
+          <div className="flex justify-center mt-8 space-x-3">
             {displayReviews.map((_, index) => (
               <motion.button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-2.5 h-2.5 rounded-lg transition-all duration-300 ${
+                className={`relative w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? "bg-[#0084FF]"
+                    ? "bg-[#0084FF] scale-125"
                     : "bg-gray-600 hover:bg-gray-500"
                 }`}
                 whileHover={{ scale: 1.2 }}
@@ -821,9 +850,35 @@ const CustomerReviewsCarousel = memo(() => {
                   duration: 0.3,
                   ease: [0.25, 0.46, 0.45, 0.94],
                 }}
-              />
+              >
+                {index === currentIndex && (
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-[#0084FF]"
+                    layoutId="activeDot"
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </motion.button>
             ))}
           </div>
+        )}
+
+        {/* Slide Counter */}
+        {displayReviews.length > 1 && (
+          <motion.div
+            className="flex justify-center mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="px-3 py-1 text-xs text-gray-500 rounded-full bg-black/50 backdrop-blur-sm">
+              {currentIndex + 1} / {displayReviews.length}
+            </div>
+          </motion.div>
         )}
       </div>
     </motion.div>
@@ -862,7 +917,7 @@ const AboutSection = memo(() => {
       {
         icon: FaChartLine,
         number: "200% Growth",
-        caption: "Engagement",
+        caption: "Average Engagement",
         delay: 0.8,
       },
       {
