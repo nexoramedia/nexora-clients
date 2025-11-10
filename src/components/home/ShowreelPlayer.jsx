@@ -44,7 +44,7 @@ const isYouTubeUrl = (url) => {
   return url && (url.includes("youtube.com") || url.includes("youtu.be"));
 };
 
-// Category configuration
+// Category configuration with badges
 const videoCategories = [
   {
     id: "youtube",
@@ -52,6 +52,12 @@ const videoCategories = [
     icon: FaYoutube,
     accentColor: "from-[#0084FF] to-[#0066CC]",
     aspect: "horizontal",
+    badge: {
+      icon: FaYoutube,
+      text: "YouTube",
+      color: "bg-red-600",
+      textColor: "text-white",
+    },
   },
   {
     id: "shorts",
@@ -59,6 +65,12 @@ const videoCategories = [
     icon: FaMobile,
     accentColor: "from-[#0084FF] to-[#0066CC]",
     aspect: "vertical",
+    badge: {
+      icon: FaMobile,
+      text: "SHORTS",
+      color: "bg-purple-600",
+      textColor: "text-white",
+    },
   },
   {
     id: "saas",
@@ -66,6 +78,12 @@ const videoCategories = [
     icon: FaChartLine,
     accentColor: "from-[#0084FF] to-[#0066CC]",
     aspect: "horizontal",
+    badge: {
+      icon: FaChartLine,
+      text: "SaaS",
+      color: "bg-blue-600",
+      textColor: "text-white",
+    },
   },
   {
     id: "ads-vsl",
@@ -73,10 +91,16 @@ const videoCategories = [
     icon: FaShoppingCart,
     accentColor: "from-[#0084FF] to-[#0066CC]",
     aspect: "horizontal",
+    badge: {
+      icon: FaShoppingCart,
+      text: "ADS & VSL",
+      color: "bg-orange-600",
+      textColor: "text-white",
+    },
   },
 ];
 
-// Custom Video Player Component with YouTube support
+// Custom Video Player Component with YouTube support - Chip Style
 const CustomVideoPlayer = ({ video, category }) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -126,26 +150,19 @@ const CustomVideoPlayer = ({ video, category }) => {
           </div>
         )}
 
-        {/* YouTube Shorts Badge */}
-        {isShorts && (
-          <div className="absolute top-3 left-3">
-            <div className="flex items-center gap-1 px-2 py-1 bg-purple-600 rounded-md">
-              <span className="text-xs font-bold text-white">SHORTS</span>
-            </div>
+        {/* Category Badge - Top Left */}
+        <div className="absolute top-3 left-3">
+          <div
+            className={`flex items-center gap-1 px-2 py-1 ${category.badge.color} rounded-md`}
+          >
+            <category.badge.icon
+              className={`w-3 h-3 ${category.badge.textColor}`}
+            />
+            <span className={`text-xs font-bold ${category.badge.textColor}`}>
+              {category.badge.text}
+            </span>
           </div>
-        )}
-
-        {/* YouTube Badge */}
-        {isYouTube && !isShorts && (
-          <div className="absolute top-3 left-3">
-            <div className="flex items-center gap-1 px-2 py-1 bg-red-600 rounded-md">
-              <FaYoutube className="w-3 h-3 text-white" />
-              <span className="text-xs font-bold text-white">YouTube</span>
-            </div>
-          </div>
-        )}
-
-        {/* Video Info */}
+        </div>
       </motion.div>
     );
   }
@@ -263,9 +280,23 @@ const CustomVideoPlayer = ({ video, category }) => {
         Your browser does not support the video tag.
       </video>
 
+      {/* Category Badge - Top Left */}
+      <div className="absolute top-3 left-3">
+        <div
+          className={`flex items-center gap-1 px-2 py-1 ${category.badge.color} rounded-md`}
+        >
+          <category.badge.icon
+            className={`w-3 h-3 ${category.badge.textColor}`}
+          />
+          <span className={`text-xs font-bold ${category.badge.textColor}`}>
+            {category.badge.text}
+          </span>
+        </div>
+      </div>
+
       {/* Progress Bar */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-1.5 bg-white/20 cursor-pointer"
+        className="absolute bottom-16 left-0 right-0 h-1.5 bg-white/20 cursor-pointer"
         onClick={seekVideo}
       >
         <div
@@ -291,7 +322,7 @@ const CustomVideoPlayer = ({ video, category }) => {
         </div>
 
         {/* Bottom Control Buttons */}
-        <div className="absolute flex items-center gap-2 pointer-events-none bottom-3 right-3">
+        <div className="absolute flex items-center gap-2 pointer-events-none bottom-20 right-3">
           <button
             onClick={toggleMute}
             className="flex items-center justify-center w-8 h-8 text-white border rounded-full pointer-events-auto bg-black/60 border-white/20"
@@ -312,8 +343,8 @@ const CustomVideoPlayer = ({ video, category }) => {
         </div>
       </div>
 
-      {/* Video Info */}
-      <div className="absolute pointer-events-none top-3 left-3 right-3">
+      {/* Video Info - Chip Style at Bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
         <div className="p-3 border rounded-lg bg-black/60 backdrop-blur-sm border-white/10">
           <h3 className="mb-1 text-sm font-semibold text-white">
             {video.title}
@@ -328,7 +359,7 @@ const CustomVideoPlayer = ({ video, category }) => {
 
       {/* Play Indicator */}
       {isPlaying && (
-        <div className="absolute top-3 left-3 px-2 py-1 rounded-full bg-black/60 border border-[#0084FF]/30">
+        <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-black/60 border border-[#0084FF]/30">
           <div className="flex items-center gap-1 text-[#0084FF] text-xs">
             <div className="w-1.5 h-1.5 bg-[#0084FF] rounded-full animate-pulse" />
             <span>PLAYING</span>

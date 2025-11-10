@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "login",
+        path: "login/",
         element: (
           <Suspense fallback={<LoadingSpinner />}>
             <Login />

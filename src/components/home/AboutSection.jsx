@@ -323,7 +323,7 @@ const isYouTubeShorts = (url) => {
   return url && (url.includes("/shorts/") || url.includes("youtu.be/"));
 };
 
-// Redesigned Customer Review Card Component - Framer Style
+// Redesigned Customer Review Card Component - Updated Color Palette
 const CustomerReviewCard = memo(({ review, isActive }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [ref, inView] = useInView({
@@ -346,7 +346,7 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
   return (
     <motion.div
       ref={ref}
-      className={`bg-[#131415] rounded-[34px] border border-gray-800 overflow-hidden transition-all duration-500 ${
+      className={`bg-gradient-to-br from-gray-900 to-black rounded-3xl border border-white/10 overflow-hidden transition-all duration-500 ${
         isActive ? "scale-100 opacity-100" : "scale-95 opacity-60"
       }`}
       whileHover={{
@@ -364,9 +364,9 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
       }}
     >
       <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-2">
-        {/* Video Section - Framer Style */}
+        {/* Video Section - Updated Colors */}
         <div className="relative">
-          <div className="relative rounded-[22px] overflow-hidden bg-black aspect-[9/16] max-w-[260px] mx-auto">
+          <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-white/10 aspect-[9/16] max-w-[260px] mx-auto">
             {/* Video Container */}
             <div className="relative w-full h-full">
               {review.videoUrl && youtubeEmbedUrl ? (
@@ -399,7 +399,7 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
                     >
                       <motion.button
                         onClick={handlePlayClick}
-                        className="backdrop-blur-[25px] bg-white/7 rounded-full p-4 border border-white/10 hover:bg-white/10 transition-all duration-300"
+                        className="backdrop-blur-[25px] bg-white/10 rounded-full p-4 border border-white/20 hover:bg-white/20 transition-all duration-300"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -417,7 +417,7 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
 
                   {/* Video Placeholder */}
                   <div className="flex flex-col items-center justify-center w-full h-full p-4 text-center text-white">
-                    <FaVideo className="w-8 h-8 mb-3 text-gray-600" />
+                    <FaVideo className="w-8 h-8 mb-3 text-gray-500" />
                     <p className="text-sm font-semibold text-gray-400">
                       Video Content
                     </p>
@@ -439,7 +439,7 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-purple-600 rounded-lg">
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-lg">
                   <FaVideo className="w-2.5 h-2.5 text-white" />
                   <span className="text-xs font-bold text-white">SHORTS</span>
                 </div>
@@ -448,7 +448,7 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
           </div>
         </div>
 
-        {/* Review Content - Framer Style */}
+        {/* Review Content - Updated Colors */}
         <div className="flex flex-col justify-center space-y-6">
           {/* Rating and Name */}
           <div className="space-y-3">
@@ -464,7 +464,7 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
                     }}
                   >
                     <svg
-                      className="w-4 h-4 text-[#009FF6] fill-current"
+                      className="w-4 h-4 text-[#0084FF] fill-current"
                       viewBox="0 0 24 24"
                     >
                       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
@@ -476,7 +476,7 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
 
             {/* Review Text */}
             <motion.blockquote
-              className="text-[15px] leading-relaxed text-[#9BA1A5] font-light"
+              className="text-[15px] leading-relaxed text-gray-300 font-light"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{
@@ -490,8 +490,8 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
             </motion.blockquote>
           </div>
 
-          {/* Results Metrics - Framer Style */}
-          <div className="flex items-center gap-4 pt-4 border-t border-gray-800">
+          {/* Results Metrics - Updated Colors */}
+          <div className="flex items-center gap-4 pt-4 border-t border-white/10">
             {/* Views Result */}
             <motion.div
               className="flex items-center gap-3"
@@ -500,17 +500,11 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
                 transition: { duration: 0.2 },
               }}
             >
-              <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20 rotate-[-90deg]">
-                <svg
-                  className="w-4 h-4 text-green-400"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+              <div className="w-8 h-8 rounded-lg bg-[#0084FF]/20 flex items-center justify-center border border-[#0084FF]/30">
+                <FaEye className="w-3 h-3 text-[#0084FF]" />
               </div>
               <div>
-                <div className="text-sm font-medium text-[#9BA1A5]">
+                <div className="text-sm font-medium text-gray-300">
                   {review.views}
                 </div>
               </div>
@@ -524,17 +518,11 @@ const CustomerReviewCard = memo(({ review, isActive }) => {
                 transition: { duration: 0.2 },
               }}
             >
-              <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center border border-orange-500/20 rotate-[-90deg]">
-                <svg
-                  className="w-4 h-4 text-orange-500"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+              <div className="w-8 h-8 rounded-lg bg-[#66B5FF]/20 flex items-center justify-center border border-[#66B5FF]/30">
+                <FaUserPlus className="w-3 h-3 text-[#66B5FF]" />
               </div>
               <div>
-                <div className="text-sm font-medium text-[#9BA1A5]">
+                <div className="text-sm font-medium text-gray-300">
                   {review.subscribers}
                 </div>
               </div>
