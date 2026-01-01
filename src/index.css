@@ -2,8 +2,8 @@
 
 body {
   background-color: #1a1a1a;
-  font-family: "Poppins", sans-serif;
-  font-optical-sizing: auto;
+  font-family: "Poppins", sans-serif !important;
+  font-optical-sizing: auto !important;
 }
 
 html {

@@ -106,7 +106,15 @@ export default function CosmicBookingSection() {
                   </h3>
                   <div className="flex items-center justify-center gap-2 mb-4 text-blue-300">
                     <FaClock className="w-4 h-4" />
-                    <span className="text-base">30 Minutes</span>
+                    <span
+                      className="text-md "
+                      style={{
+                        fontFamily: "Poppins, sans-serif",
+                        fontOpticalSizing: "auto",
+                      }}
+                    >
+                      30 Minutes
+                    </span>
                   </div>
                 </div>
 
@@ -131,6 +139,10 @@ export default function CosmicBookingSection() {
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.5 + index * 0.1 }}
+                        style={{
+                          fontFamily: "Poppins, sans-serif",
+                          fontOpticalSizing: "auto",
+                        }}
                         className="flex items-center gap-3 text-blue-300"
                       >
                         <HiSparkles className="flex-shrink-0 w-3 h-3 text-blue-400" />

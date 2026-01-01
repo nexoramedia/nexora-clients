@@ -792,6 +792,10 @@ export default function CosmicFooter() {
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 + index * 0.05 }}
                   className="text-gray-400 hover:text-[#0084FF] text-sm transition-colors duration-300 text-left"
+                  style={{
+                    fontFamily: "Poppins, sans-serif",
+                    fontOpticalSizing: "auto",
+                  }}
                   whileHover={{ x: 5 }}
                   onClick={() => handleQuickLinkClick(link.href)}
                 >
