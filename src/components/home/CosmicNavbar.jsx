@@ -4,10 +4,6 @@ import {
   FaRocket,
   FaBars,
   FaTimes,
-  FaUserAstronaut,
-  FaVideo,
-  FaMagic,
-  FaStar,
   FaUserCircle,
   FaSignOutAlt,
   FaTachometerAlt,
@@ -90,7 +86,7 @@ const ProfileDropdown = ({ isOpen, onClose, user, onLogout, onDashboard }) => {
           <div className="p-1">
             <motion.button
               onClick={onDashboard}
-              className="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-300 rounded-lg hover:bg-[#0084FF]/20 hover:text-white transition-all duration-200 group"
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-300 rounded-full hover:bg-[#0084FF]/20 hover:text-white transition-all duration-200 group"
               whileHover={{ x: 4 }}
             >
               <FaTachometerAlt className="w-4 h-4 text-[#0084FF] group-hover:text-[#66B5FF]" />
@@ -99,7 +95,7 @@ const ProfileDropdown = ({ isOpen, onClose, user, onLogout, onDashboard }) => {
 
             <motion.button
               onClick={onLogout}
-              className="flex items-center w-full gap-3 px-3 py-2 text-sm text-gray-300 transition-all duration-200 rounded-lg hover:bg-red-500/20 hover:text-white group"
+              className="flex items-center w-full gap-3 px-3 py-2 text-sm text-gray-300 transition-all duration-200 rounded-full hover:bg-red-500/20 hover:text-white group"
               whileHover={{ x: 4 }}
             >
               <FaSignOutAlt className="w-4 h-4 text-red-400 group-hover:text-red-300" />
@@ -147,12 +143,18 @@ const MobileMenu = ({
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-800/50">
-              <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  scrollToSection("home", "Home");
+                  onClose();
+                }}
+                className="flex items-center gap-3 cursor-pointer group"
+              >
                 <img src={logo} alt="Logo" className="w-10 h-10" />
-              </div>
+              </button>
               <button
                 onClick={onClose}
-                className="p-2 text-gray-400 transition-colors rounded-lg bg-gray-800/50 hover:text-white"
+                className="p-2 text-gray-400 transition-colors rounded-full bg-gray-800/50 hover:text-white"
               >
                 <FaTimes className="w-5 h-5" />
               </button>
@@ -181,15 +183,14 @@ const MobileMenu = ({
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl bg-gray-800/30 text-white hover:bg-[#0084FF]/30 transition-all duration-300 group"
+                  className="flex items-center justify-center w-full p-3 rounded-full bg-gray-800/30 text-white hover:bg-[#0084FF]/30 transition-all duration-300 group"
                   onClick={() => {
                     scrollToSection(item.href.replace("#", ""), item.name);
                     onClose();
                   }}
                 >
-                  <item.icon className="w-5 h-5 text-[#0084FF] group-hover:text-[#66B5FF]" />
                   <span className="font-medium">{item.name}</span>
-                  <HiSparkles className="w-4 h-4 ml-auto text-yellow-400 transition-opacity opacity-0 group-hover:opacity-100" />
+                  <HiSparkles className="w-4 h-4 ml-2 text-yellow-400 transition-opacity opacity-0 group-hover:opacity-100" />
                 </motion.button>
               ))}
 
@@ -199,7 +200,7 @@ const MobileMenu = ({
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: navigation.length * 0.1 }}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl bg-gray-800/30 text-white hover:bg-[#0084FF]/30 transition-all duration-300 group"
+                  className="flex items-center gap-3 w-full p-3 rounded-full bg-gray-800/30 text-white hover:bg-[#0084FF]/30 transition-all duration-300 group"
                   onClick={() => {
                     onDashboard();
                     onClose();
@@ -218,7 +219,7 @@ const MobileMenu = ({
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
-                  className="flex items-center justify-center w-full gap-2 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-red-500 to-red-600 rounded-xl hover:shadow-lg"
+                  className="flex items-center justify-center w-full gap-2 py-3 font-semibold text-white transition-all duration-300 rounded-full bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
@@ -234,7 +235,7 @@ const MobileMenu = ({
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
-                  className="w-full py-3 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-xl text-white font-semibold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300"
+                  className="w-full py-3 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-full text-white font-semibold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
@@ -243,7 +244,7 @@ const MobileMenu = ({
                   }}
                 >
                   <FaRocket className="w-4 h-4" />
-                  Book a Call
+                  Contact Now
                 </motion.button>
               )}
             </div>
@@ -259,17 +260,16 @@ export default function CosmicNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("Home");
+  const [activeLink, setActiveLink] = useState("About");
   const [isManualScroll, setIsManualScroll] = useState(false);
 
   const { isAuthenticated, user, logout } = useAuth();
 
+  // Updated navigation with only your three buttons
   const navigation = [
-    { name: "Home", href: "#home", icon: FaRocket },
-    { name: "Services", href: "#services", icon: FaVideo },
-    { name: "Work", href: "#showreel", icon: FaStar },
-    { name: "About", href: "#about", icon: FaUserAstronaut },
-    { name: "Contact", href: "#contact", icon: FaMagic },
+    { name: "About", href: "#about" },
+    { name: "Work", href: "#work" },
+    { name: "Contact", href: "#contact" },
   ];
 
   // Scroll to any section
@@ -288,6 +288,23 @@ export default function CosmicNavbar() {
         behavior: "smooth",
       });
     }
+
+    // Reset manual scroll flag after scroll completes
+    setTimeout(() => {
+      setIsManualScroll(false);
+    }, 1500);
+  };
+
+  // Scroll to home section
+  const scrollToHome = () => {
+    setIsManualScroll(true);
+    setActiveLink("Home");
+
+    // Scroll to the top of the page (home section)
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
     // Reset manual scroll flag after scroll completes
     setTimeout(() => {
@@ -324,24 +341,29 @@ export default function CosmicNavbar() {
       const scrollPosition = window.scrollY + 100;
 
       // Find which section is currently in view
-      let currentSection = "Home";
+      let currentSection = "About";
 
-      navigation.forEach((item) => {
-        const section = document.getElementById(item.href.replace("#", ""));
-        if (section) {
-          const sectionTop = section.offsetTop;
-          const sectionHeight = section.offsetHeight;
-          const sectionBottom = sectionTop + sectionHeight;
+      // Check if we're at the top of the page (home)
+      if (window.scrollY < 100) {
+        currentSection = "Home";
+      } else {
+        navigation.forEach((item) => {
+          const section = document.getElementById(item.href.replace("#", ""));
+          if (section) {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionBottom = sectionTop + sectionHeight;
 
-          // Check if section is in viewport with some threshold
-          if (
-            scrollPosition >= sectionTop - 100 &&
-            scrollPosition < sectionBottom - 100
-          ) {
-            currentSection = item.name;
+            // Check if section is in viewport with some threshold
+            if (
+              scrollPosition >= sectionTop - 100 &&
+              scrollPosition < sectionBottom - 100
+            ) {
+              currentSection = item.name;
+            }
           }
-        }
-      });
+        });
+      }
 
       setActiveLink(currentSection);
     };
@@ -384,21 +406,23 @@ export default function CosmicNavbar() {
 
         <div className="container px-4 mx-auto">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <motion.div
-              className="flex items-center gap-3"
+            {/* Logo - Clickable */}
+            <motion.button
+              className="flex items-center gap-3 cursor-pointer group"
               whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
+              onClick={scrollToHome}
             >
               <img src={logo} alt="Logo" className="h-20 w-34" />
-            </motion.div>
+            </motion.button>
 
             {/* Desktop Navigation */}
-            <nav className="items-center hidden gap-1 lg:flex">
+            <nav className="items-center hidden gap-3 lg:flex">
               {navigation.map((item) => (
                 <motion.button
                   key={item.name}
-                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 group ${
+                  className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 group ${
                     activeLink === item.name
                       ? "text-white bg-[#0084FF]/30 shadow-lg shadow-[#0084FF]/20"
                       : "text-gray-300 hover:text-white hover:bg-gray-800/30"
@@ -407,10 +431,7 @@ export default function CosmicNavbar() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleNavClick(item.name, item.href)}
                 >
-                  <span className="flex items-center gap-2">
-                    <item.icon className="w-4 h-4" />
-                    {item.name}
-                  </span>
+                  <span>{item.name}</span>
 
                   {/* Active Indicator */}
                   {activeLink === item.name && (
@@ -422,7 +443,7 @@ export default function CosmicNavbar() {
 
                   {/* Hover Effect */}
                   <motion.div
-                    className="absolute inset-0 rounded-xl border border-[#0084FF]/30 opacity-0 group-hover:opacity-100"
+                    className="absolute inset-0 rounded-full border border-[#0084FF]/30 opacity-0 group-hover:opacity-100"
                     initial={false}
                     transition={{ duration: 0.2 }}
                   />
@@ -436,7 +457,7 @@ export default function CosmicNavbar() {
               {isAuthenticated ? (
                 <div className="relative">
                   <motion.button
-                    className="flex items-center gap-2 p-2 text-gray-300 transition-colors rounded-lg hover:text-white hover:bg-gray-800/30"
+                    className="flex items-center gap-2 p-2 text-gray-300 transition-colors rounded-full hover:text-white hover:bg-gray-800/30"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() =>
@@ -460,7 +481,7 @@ export default function CosmicNavbar() {
               ) : (
                 /* CTA Button for non-authenticated users */
                 <motion.button
-                  className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-xl text-white font-semibold text-sm hover:shadow-lg transition-all duration-300"
+                  className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-full text-white font-semibold text-sm hover:shadow-lg transition-all duration-300"
                   whileHover={{
                     scale: 1.05,
                     boxShadow: "0 0 20px rgba(0, 132, 255, 0.4)",
@@ -469,14 +490,14 @@ export default function CosmicNavbar() {
                   onClick={() => scrollToSection("contact", "Contact")}
                 >
                   <FaRocket className="w-4 h-4" />
-                  <span>Book a Call</span>
+                  <span>Contact Now</span>
                   <HiCursorClick className="w-4 h-4" />
                 </motion.button>
               )}
 
               {/* Mobile Menu Button */}
               <motion.button
-                className="p-2 text-gray-300 transition-colors rounded-lg lg:hidden hover:text-white hover:bg-gray-800/30"
+                className="p-2 text-gray-300 transition-colors rounded-full lg:hidden hover:text-white hover:bg-gray-800/30"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsMobileMenuOpen(true)}

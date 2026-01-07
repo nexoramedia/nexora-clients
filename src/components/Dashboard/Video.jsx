@@ -24,7 +24,7 @@ const Video = () => {
   const videoCategories = [
     { value: "youtube", label: "YouTube Videos", limit: 4 },
     { value: "shorts", label: "Shorts", limit: 3 },
-    { value: "saas", label: "SaaS Videos", limit: 4 },
+    { value: "podcasts", label: "Podcasts", limit: 4 },
     { value: "ads-vsl", label: "Ads & VSL", limit: 4 },
     { value: "introduction", label: "Introduction", limit: 1 },
     { value: "case-study", label: "Case Study", limit: 1 },

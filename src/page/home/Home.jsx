@@ -50,17 +50,18 @@ const Home = () => {
         <NexoraHero />
       </Suspense>
 
+      <Suspense fallback={<SectionLoader />}>
+        <ShowreelPlayer />
+      </Suspense>
+
       {/* Other sections with individual loading states */}
       <Suspense fallback={<SectionLoader />}>
         <AboutSection />
       </Suspense>
 
-      <Suspense fallback={<SectionLoader />}>
-        <ShowreelPlayer />
-      </Suspense>
-      <Suspense fallback={<SectionLoader />}>
+      {/* <Suspense fallback={<SectionLoader />}>
         <CaseStudy />
-      </Suspense>
+      </Suspense> */}
 
       {/* <Suspense fallback={<SectionLoader />}>
         <WhyChooseUsSection />
@@ -70,9 +71,9 @@ const Home = () => {
         <NextGenServicesSection />
       </Suspense>
 
-      <Suspense fallback={<SectionLoader />}>
+      {/* <Suspense fallback={<SectionLoader />}>
         <CoreService />
-      </Suspense>
+      </Suspense> */}
 
       <Suspense fallback={<SectionLoader />}>
         <CosmicClientReviews />

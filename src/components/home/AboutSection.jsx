@@ -18,7 +18,6 @@ import {
 } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi";
 import { useReviews } from "../../hook/useReview";
-import StatsSection from "./StatsSection";
 
 // Enhanced Balloon Tag Component with Icons - Responsive
 const BalloonTag = memo(({ text, delay = 0, direction, icon: Icon }) => {
@@ -743,7 +742,7 @@ const CustomerReviewsCarousel = memo(() => {
         }}
         viewport={{ once: true, margin: "-50px" }}
       >
-        <h2 className="mb-4 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+        <h2 className="mb-4 text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
           Hear what they're Saying about us
         </h2>
         <p className="max-w-2xl px-4 mx-auto text-sm text-gray-400 sm:text-base">
@@ -874,60 +873,10 @@ const CustomerReviewsCarousel = memo(() => {
 });
 
 const AboutSection = memo(() => {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  const balloons = useMemo(
-    () => [
-      { text: "Podcast", direction: "topLeft", delay: 0.2, icon: FaPodcast },
-      { text: "Short Form", direction: "topRight", delay: 0.3, icon: FaVideo },
-      {
-        text: "Social Media",
-        direction: "bottomLeft",
-        delay: 0.4,
-        icon: FaShareAlt,
-      },
-      {
-        text: "Viral Edits",
-        direction: "bottomRight",
-        delay: 0.5,
-        icon: FaMagic,
-      },
-    ],
-    []
-  );
-
-  // Compact stats
-  const stats = useMemo(
-    () => [
-      {
-        icon: FaChartLine,
-        number: "200% Growth",
-        caption: "Average Engagement",
-        delay: 0.8,
-      },
-      {
-        icon: FaUserPlus,
-        number: "5x More Reach",
-        caption: "Strategic Distribution",
-        delay: 0.7,
-      },
-      {
-        icon: FaEye,
-        number: "50% More Leads",
-        caption: "Automated Systems",
-        delay: 0.6,
-      },
-    ],
-    []
-  );
-
   return (
     <section
       id="about"
-      className="relative flex items-center min-h-screen px-4 py-16 overflow-hidden"
+      className="relative flex items-center min-h-screen px-4 py-8 overflow-hidden"
     >
       {/* Enhanced Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -959,62 +908,6 @@ const AboutSection = memo(() => {
       </div>
 
       <div className="relative z-10 w-full max-w-6xl mx-auto">
-        <div className="relative flex items-center justify-center mb-12">
-          {balloons.map((balloon, index) => (
-            <BalloonTag
-              key={index}
-              text={balloon.text}
-              direction={balloon.direction}
-              delay={balloon.delay}
-              icon={balloon.icon}
-            />
-          ))}
-
-          <motion.div
-            ref={ref}
-            className="relative z-30 mx-auto text-center"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.8,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            viewport={{ once: true, margin: "-50px" }}
-          >
-            {/* Responsive Main Title */}
-            <motion.h1 className="px-4 mb-4 text-2xl font-bold leading-tight text-white sm:text-2xl md:text-4xl lg:text-5xl">
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.2,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                viewport={{ once: true, margin: "-50px" }}
-              >
-                Tired of boring video content
-              </motion.span>
-              <motion.span
-                className="block bg-gradient-to-r from-[#66B5FF] to-[#0084FF] bg-clip-text text-transparent"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.3,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                }}
-                viewport={{ once: true, margin: "-50px" }}
-              >
-                that doesn't stand out?
-              </motion.span>
-            </motion.h1>
-          </motion.div>
-        </div>
-
-        <StatsSection stats={stats} />
-
         {/* Customer Reviews Carousel */}
         <div className="mb-8">
           <CustomerReviewsCarousel />

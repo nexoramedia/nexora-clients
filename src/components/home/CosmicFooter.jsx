@@ -49,7 +49,8 @@ const BackToTop = () => {
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0 }}
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-50 p-3 bg-gradient-to-br from-[#0084FF] to-[#0066CC] rounded-xl text-white shadow-2xl backdrop-blur-sm border border-[#0084FF]/30"
+      className="fixed bottom-6 right-6 z-50 p-3 bg-gradient-to-br from-[#0084FF] to-[#0066CC] rounded-full text-white shadow-2xl backdrop-blur-sm border border-[#0084FF]/30"
+      style={{ fontFamily: "'Poppins', sans-serif" }}
       whileHover={{ scale: 1.1, y: -2 }}
       whileTap={{ scale: 0.9 }}
     >
@@ -69,11 +70,13 @@ const SuccessModal = ({ isOpen, onClose, quote, riddleNumber }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -20 }}
             className="relative w-full max-w-md p-6 border rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700/50"
+            style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute p-2 text-gray-400 transition-colors top-4 right-4 hover:text-white"
+              className="absolute p-2 text-gray-400 transition-colors rounded-full top-4 right-4 hover:text-white"
+              style={{ fontFamily: "'Poppins', sans-serif" }}
             >
               <FaTimes className="w-4 h-4" />
             </button>
@@ -103,7 +106,8 @@ const SuccessModal = ({ isOpen, onClose, quote, riddleNumber }) => {
 
               <motion.button
                 onClick={onClose}
-                className="w-full px-6 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-xl hover:shadow-lg hover:shadow-[#0084FF]/25"
+                className="w-full px-6 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-full hover:shadow-lg hover:shadow-[#0084FF]/25"
+                style={{ fontFamily: "'Poppins', sans-serif" }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -123,13 +127,13 @@ const getRandomQuote = () => {
     "🌞 A bright mind can outshine even the darkest day!",
     "🚀 Your next step could be the one that changes everything!",
     "🌈 Let today be the canvas for your boldest colors!",
-    "✨ You’re stronger than the challenges trying to slow you down!",
+    "✨ You're stronger than the challenges trying to slow you down!",
     "🔥 Every spark of effort lights a bigger fire within you!",
     "🌟 Small progress becomes big success when you stay consistent!",
     "💡 Your ideas matter — let them breathe and grow!",
     "🎉 Celebrate the tiny wins; they build the huge victories!",
     "🍃 A calm mind creates the loudest brilliance!",
-    "🚦 Don’t wait for perfect conditions — green lights appear when you move!",
+    "🚦 Don't wait for perfect conditions — green lights appear when you move!",
     "🎯 Purpose fuels power!",
     "💫 Every sunrise brings a new chance to rewrite your story!",
     "🌊 Let your creativity flow; it always finds its way forward!",
@@ -143,10 +147,10 @@ const getRandomQuote = () => {
     "🚀 One brave idea can lift you higher than a thousand fears!",
     "🧠 Your imagination is a universe — explore it boldly!",
     "🕊️ Peace creates the space where genius lives!",
-    "🌻 You never know who you’re inspiring just by being yourself!",
+    "🌻 You never know who you're inspiring just by being yourself!",
     "💎 Shine gently or shine boldly — just shine!",
     "✨ Your uniqueness is your superpower!",
-    "🎵 Life has rhythm — trust the beat you’re meant to follow!",
+    "🎵 Life has rhythm — trust the beat you're meant to follow!",
     "🔧 You can build something extraordinary with the tools you already have!",
     "🎨 Your mind is a studio — create something breathtaking!",
     "🌠 Dreams turn into reality when courage meets action!",
@@ -154,13 +158,13 @@ const getRandomQuote = () => {
     "🔥 Let ambition warm you, not burn you!",
     "🧭 Follow the direction that excites your soul!",
     "🎒 Every experience packs a lesson you can carry forward!",
-    "🌟 Your strength shows most when you don’t notice it!",
+    "🌟 Your strength shows most when you don't notice it!",
     "🎈 Hope lifts heavier weights than fear!",
-    "🛠️ You’re building a masterpiece, one decision at a time!",
+    "🛠️ You're building a masterpiece, one decision at a time!",
     "🌬️ Let go of what slows you — breathe in what grows you!",
     "💫 Good things start with a shift in mindset!",
     "🪄 Magic happens when you trust the process!",
-    "🚀 You’re closer than you think!",
+    "🚀 You're closer than you think!",
     "🌼 Kindness nourishes creativity!",
     "📘 Every page you turn makes your story richer!",
     "🔥 Use challenges as fuel, not obstacles!",
@@ -170,7 +174,7 @@ const getRandomQuote = () => {
     "🎯 Focus and faith create unstoppable momentum!",
     "💡 A fresh perspective can open locked doors!",
     "🌙 Even in darkness, your vision can glow!",
-    "🎉 Celebrate how far you’ve already come!",
+    "🎉 Celebrate how far you've already come!",
     "🦁 Be brave enough to be yourself loudly!",
     "🌱 Every skill started as a seed of curiosity!",
     "⚡ Creativity grows in the space you give it!",
@@ -181,8 +185,8 @@ const getRandomQuote = () => {
     "🧘 A quiet mind hears the loudest inspiration!",
     "🌙 Trust the journey, even when the map is unclear!",
     "🔮 Your vision is a preview of your future greatness!",
-    "✨ Don’t dim your sparkle to fit into the shadows!",
-    "🌊 Rise with the waves, don’t fear them!",
+    "✨ Don't dim your sparkle to fit into the shadows!",
+    "🌊 Rise with the waves, don't fear them!",
     "🎯 Your focus turns dreams into destinations!",
     "🔥 Keep your spark alive — it becomes a flame!",
     "🚀 Your dreams deserve committed effort!",
@@ -202,21 +206,21 @@ const getRandomQuote = () => {
     "🎬 Your life is a film — make the scenes unforgettable!",
     "🚦 Move forward even if the path is unfamiliar!",
     "🧠 Your brain is a fountain — keep it flowing!",
-    "🌟 Don’t just chase stars — become one!",
-    "🎯 You’re capable of more than you realize!",
+    "🌟 Don't just chase stars — become one!",
+    "🎯 You're capable of more than you realize!",
     "🛤️ Every step in the right direction counts!",
     "🔥 Your passion is a compass — follow it!",
     "🌄 Keep climbing — the view gets better!",
-    "✨ Believe in the version of you that’s trying to grow!",
+    "✨ Believe in the version of you that's trying to grow!",
     "🌊 Let inspiration wash over you!",
     "🌟 You bring color to the world just by being in it!",
     "🔮 Your future self is cheering for you!",
     "🎉 Joy is fuel — let it guide you!",
-    "💫 You’re writing a beautiful story, page by page!",
+    "💫 You're writing a beautiful story, page by page!",
     "⚡ Bold actions bring bright results!",
-    "🌻 You’re blooming exactly where you need to!",
-    "🚀 Push past comfortable — that’s where growth begins!",
-    "🎨 Make mistakes; they’re brushstrokes of genius!",
+    "🌻 You're blooming exactly where you need to!",
+    "🚀 Push past comfortable — that's where growth begins!",
+    "🎨 Make mistakes; they're brushstrokes of genius!",
     "🌈 Your happiness is worth investing in!",
     "✨ Shine today — the world needs your light!",
     "🌟 You are capable, creative, and endlessly powerful!",
@@ -271,7 +275,7 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
     // ✅ SECRET ADMIN RIDDLE (unchanged)
     {
       riddle:
-        "I start in your memory and end in your mind. Only you know the pattern I follow. To everyone else, I’m just noise. What am I?",
+        "I start in your memory and end in your mind. Only you know the pattern I follow. To everyone else, I'm just noise. What am I?",
       answer: import.meta.env.VITE_RIDDLE_ANSWER,
       hint: "think of a private sequence or pattern that begins with a memory and finishes as a mental tag — a short phrase, name, rhythm, or ordering only you would immediately recognize.",
       isSecret: true,
@@ -280,7 +284,7 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
     // ✅ NEW RIDDLES (single-word answers)
     {
       riddle:
-        "I’m the moment between moments, softening a cut or sharpening it when needed. What am I?",
+        "I'm the moment between moments, softening a cut or sharpening it when needed. What am I?",
       answer: "transition",
       hint: "Used between two clips.",
     },
@@ -381,7 +385,7 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" style={{ fontFamily: "'Poppins', sans-serif" }}>
       <AnimatePresence mode="wait">
         {gameState === "intro" && (
           <motion.div
@@ -389,6 +393,7 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.1 }}
             className="p-6 border rounded-2xl bg-gray-800/30 border-gray-700/50"
+            style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             <div className="text-center">
               <motion.div
@@ -427,7 +432,8 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
 
               <motion.button
                 onClick={startChallenge}
-                className="w-full px-6 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-xl hover:shadow-lg hover:shadow-[#0084FF]/25"
+                className="w-full px-6 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-full hover:shadow-lg hover:shadow-[#0084FF]/25"
+                style={{ fontFamily: "'Poppins', sans-serif" }}
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -443,6 +449,7 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             className="p-5 border rounded-2xl bg-gray-800/30 border-gray-700/50"
+            style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             {/* Progress Header */}
             <div className="flex items-center justify-between mb-4">
@@ -504,14 +511,16 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
                 onChange={(e) => setUserAnswer(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && checkAnswer()}
                 placeholder="Type your creative answer..."
-                className="w-full px-4 py-3 text-white placeholder-gray-400 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-[#0084FF] focus:ring-1 focus:ring-[#0084FF]"
+                className="w-full px-4 py-3 text-white placeholder-gray-400 bg-gray-700/50 border border-gray-600 rounded-full focus:outline-none focus:border-[#0084FF] focus:ring-1 focus:ring-[#0084FF]"
+                style={{ fontFamily: "'Poppins', sans-serif" }}
               />
 
               {/* Action Buttons */}
               <div className="flex gap-2">
                 <motion.button
                   onClick={checkAnswer}
-                  className="flex-1 px-4 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-xl hover:shadow-lg hover:shadow-[#0084FF]/25"
+                  className="flex-1 px-4 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-full hover:shadow-lg hover:shadow-[#0084FF]/25"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -521,7 +530,8 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
                 {!showHint && hintsUsed < 3 && (
                   <motion.button
                     onClick={useHint}
-                    className="px-4 py-3 font-semibold text-gray-300 transition-all duration-300 bg-gray-700/50 rounded-xl hover:bg-gray-600/50"
+                    className="px-4 py-3 font-semibold text-gray-300 transition-all duration-300 rounded-full bg-gray-700/50 hover:bg-gray-600/50"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -537,6 +547,7 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
                   <motion.button
                     onClick={skipRiddle}
                     className="flex-1 py-2 text-sm text-gray-500 transition-colors hover:text-gray-400"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                     whileHover={{ y: -1 }}
                   >
                     Skip this riddle →
@@ -544,7 +555,8 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
                 ) : (
                   <motion.button
                     onClick={endChallenge}
-                    className="flex items-center justify-center flex-1 gap-2 px-4 py-2 text-sm font-medium text-gray-400 transition-all duration-300 bg-gray-700/50 rounded-xl hover:bg-gray-600/50 hover:text-gray-300"
+                    className="flex items-center justify-center flex-1 gap-2 px-4 py-2 text-sm font-medium text-gray-400 transition-all duration-300 rounded-full bg-gray-700/50 hover:bg-gray-600/50 hover:text-gray-300"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -562,6 +574,7 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="p-6 text-center border rounded-2xl bg-gradient-to-r from-[#0084FF]/10 to-[#0066CC]/10 border-[#0084FF]/20"
+            style={{ fontFamily: "'Poppins', sans-serif" }}
           >
             <motion.div
               initial={{ scale: 0 }}
@@ -592,7 +605,8 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
             <div className="flex gap-3">
               <motion.button
                 onClick={restartChallenge}
-                className="flex-1 px-4 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-xl hover:shadow-lg hover:shadow-[#0084FF]/25"
+                className="flex-1 px-4 py-3 font-semibold text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-full hover:shadow-lg hover:shadow-[#0084FF]/25"
+                style={{ fontFamily: "'Poppins', sans-serif" }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -601,7 +615,8 @@ const VideoEditingRiddleChallenge = ({ onAdminAccessGranted }) => {
 
               <motion.button
                 onClick={() => setGameState("intro")}
-                className="flex-1 px-4 py-3 font-semibold text-gray-300 transition-all duration-300 bg-gray-700/50 rounded-xl hover:bg-gray-600/50"
+                className="flex-1 px-4 py-3 font-semibold text-gray-300 transition-all duration-300 rounded-full bg-gray-700/50 hover:bg-gray-600/50"
+                style={{ fontFamily: "'Poppins', sans-serif" }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -696,7 +711,7 @@ export default function CosmicFooter() {
   };
 
   const handlePortfolioClick = () => {
-    window.open("https://mahimshahriar.com", "_blank", "noopener,noreferrer");
+    window.open("https://mahim-protfolio.vercel.app/", "_blank", "noopener,noreferrer");
   };
 
   const startChallenge = () => {
@@ -704,7 +719,10 @@ export default function CosmicFooter() {
   };
 
   return (
-    <footer className="relative bg-black border-t border-gray-800/30">
+    <footer 
+      className="relative bg-black border-t border-gray-800/30"
+      style={{ fontFamily: "'Poppins', sans-serif" }}
+    >
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-black" />
@@ -762,7 +780,7 @@ export default function CosmicFooter() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.2, y: -2 }}
-                  className="p-2 transition-all duration-300 rounded-lg bg-gray-800/50 hover:bg-gray-700/50"
+                  className="p-2 transition-all duration-300 rounded-full bg-gray-800/50 hover:bg-gray-700/50"
                 >
                   <social.icon
                     className="w-4 h-4"
@@ -792,10 +810,7 @@ export default function CosmicFooter() {
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 + index * 0.05 }}
                   className="text-gray-400 hover:text-[#0084FF] text-sm transition-colors duration-300 text-left"
-                  style={{
-                    fontFamily: "Poppins, sans-serif",
-                    fontOpticalSizing: "auto",
-                  }}
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
                   whileHover={{ x: 5 }}
                   onClick={() => handleQuickLinkClick(link.href)}
                 >
@@ -832,7 +847,8 @@ export default function CosmicFooter() {
                 <div className="flex flex-col gap-2">
                   <motion.button
                     onClick={handleDashboard}
-                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-lg hover:shadow-lg hover:shadow-[#0084FF]/25"
+                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white transition-all duration-300 bg-gradient-to-r from-[#0084FF] to-[#0066CC] rounded-full hover:shadow-lg hover:shadow-[#0084FF]/25"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -842,7 +858,8 @@ export default function CosmicFooter() {
 
                   <motion.button
                     onClick={handleLogout}
-                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white transition-all duration-300 rounded-lg bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg hover:shadow-red-500/25"
+                    className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white transition-all duration-300 rounded-full bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg hover:shadow-red-500/25"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -861,7 +878,8 @@ export default function CosmicFooter() {
                 </div>
                 <motion.button
                   onClick={handleAdminLogin}
-                  className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white transition-all duration-300 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 hover:shadow-lg hover:shadow-green-500/25"
+                  className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white transition-all duration-300 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 hover:shadow-lg hover:shadow-green-500/25"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -883,7 +901,8 @@ export default function CosmicFooter() {
                 </p>
                 <motion.button
                   onClick={startChallenge}
-                  className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white transition-all duration-300 rounded-lg bg-gradient-to-r from-[#0084FF] to-[#0066CC] hover:shadow-lg hover:shadow-[#0084FF]/25"
+                  className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white transition-all duration-300 rounded-full bg-gradient-to-r from-[#0084FF] to-[#0066CC] hover:shadow-lg hover:shadow-[#0084FF]/25"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -904,6 +923,7 @@ export default function CosmicFooter() {
               <motion.button
                 onClick={handlePortfolioClick}
                 className="transition-all duration-300 hover:text-[#0084FF] hover:scale-105"
+                style={{ fontFamily: "'Poppins', sans-serif" }}
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.95 }}
               >

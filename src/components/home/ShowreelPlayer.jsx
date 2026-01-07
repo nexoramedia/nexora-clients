@@ -13,6 +13,7 @@ import {
   FaShoppingCart,
   FaUser,
   FaFileAlt,
+  FaMicrophone,
 } from "react-icons/fa";
 import { useVideo } from "../../hook/useVideo";
 
@@ -73,14 +74,14 @@ const videoCategories = [
     },
   },
   {
-    id: "saas",
-    name: "SaaS",
-    icon: FaChartLine,
+    id: "podcasts",
+    name: "Podcasts",
+    icon: FaMicrophone,
     accentColor: "from-[#0084FF] to-[#0066CC]",
     aspect: "horizontal",
     badge: {
-      icon: FaChartLine,
-      text: "SaaS",
+      icon: FaMicrophone,
+      text: "PODCASTS",
       color: "bg-blue-600",
       textColor: "text-white",
     },
@@ -420,7 +421,7 @@ const VideoGrid = ({ category, videos, loading }) => {
   }
 
   return (
-    <div className="mb-16">
+    <div className="mb-8">
       <div
         className={`grid grid-cols-1 ${
           isShort ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2"
@@ -487,13 +488,8 @@ const ProtectedVideoShowcase = () => {
         >
           {/* Main Header Content */}
           <div className="relative z-30 mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900/80 backdrop-blur-sm border border-[#0084FF]/30 mb-6">
-              <span className="text-[#0084FF] font-medium text-sm">
-                OUR WORK
-              </span>
-            </div>
-
-            <h2 className="mb-6 text-3xl font-bold text-white md:text-5xl">
+            {/* REDUCED TITLE TEXT SIZE */}
+            <h2 className="mb-6 text-2xl font-semibold text-white md:text-4xl">
               Some of our
               <br />
               <span className="bg-gradient-to-r from-[#66B5FF] to-[#0084FF] bg-clip-text text-transparent">

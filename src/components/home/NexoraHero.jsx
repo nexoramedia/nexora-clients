@@ -198,11 +198,11 @@ const VideoPlayer = memo(() => {
   // YouTube-like aspect ratio (16:9)
   const youtubeAspectRatio = useMemo(
     () => ({
-      container: "w-full max-w-4xl mx-auto mb-8 px-4",
+      container: "w-full max-w-3xl mx-auto mb-4 px-4",
       wrapper: "relative w-full",
       player: {
-        base: "relative w-full overflow-hidden bg-black cursor-pointer rounded-xl",
-        aspect: "aspect-video", // This gives 16:9 aspect ratio
+        base: "relative w-full overflow-hidden bg-black cursor-pointer rounded-lg",
+        aspect: "aspect-video",
       },
     }),
     []
@@ -258,12 +258,12 @@ const VideoPlayer = memo(() => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-0 left-0 right-0 z-20 p-3 bg-gradient-to-t from-black/80 to-transparent"
+            className="absolute bottom-0 left-0 right-0 z-20 p-2 bg-gradient-to-t from-black/80 to-transparent"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Progress Bar */}
             <div
-              className="relative w-full h-1 mb-4 rounded-full cursor-pointer bg-white/30 group"
+              className="relative w-full h-1 mb-2 rounded-full cursor-pointer bg-white/30 group"
               onClick={seekVideo}
             >
               <div
@@ -271,51 +271,51 @@ const VideoPlayer = memo(() => {
                 style={{ width: `${progress}%` }}
               />
               <div
-                className="absolute w-3 h-3 -translate-y-1 -translate-x-1.5 bg-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute w-2 h-2 -translate-y-0.5 -translate-x-1 bg-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 style={{ left: `${progress}%` }}
               />
             </div>
 
             {/* Control Buttons */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 {/* Play/Pause */}
                 <button
                   onClick={handlePlayPause}
-                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center w-6 h-6 text-white transition-opacity hover:opacity-80"
                 >
                   {videoPlaying ? (
-                    <FaPause className="w-4 h-4" />
+                    <FaPause className="w-3 h-3" />
                   ) : (
-                    <FaPlay className="w-4 h-4" />
+                    <FaPlay className="w-3 h-3" />
                   )}
                 </button>
 
                 {/* Volume */}
                 <button
                   onClick={toggleMute}
-                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center w-6 h-6 text-white transition-opacity hover:opacity-80"
                 >
                   {isMuted ? (
-                    <FaVolumeMute className="w-4 h-4" />
+                    <FaVolumeMute className="w-3 h-3" />
                   ) : (
-                    <FaVolumeUp className="w-4 h-4" />
+                    <FaVolumeUp className="w-3 h-3" />
                   )}
                 </button>
 
                 {/* Time Display */}
-                <div className="font-mono text-xs text-white">0:00 / 0:00</div>
+                <div className="font-mono text-[10px] text-white">
+                  0:00 / 0:00
+                </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                {/* Settings would go here */}
-
+              <div className="flex items-center gap-2">
                 {/* Fullscreen */}
                 <button
                   onClick={handleFullscreen}
-                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center w-6 h-6 text-white transition-opacity hover:opacity-80"
                 >
-                  <FaExpand className="w-4 h-4" />
+                  <FaExpand className="w-3 h-3" />
                 </button>
               </div>
             </div>
@@ -339,9 +339,9 @@ const VideoPlayer = memo(() => {
               whileTap={{ scale: 0.9 }}
               className="relative"
             >
-              <div className="relative flex items-center justify-center w-20 h-20 bg-red-600 rounded-full shadow-2xl">
+              <div className="relative flex items-center justify-center bg-red-600 rounded-full shadow-lg w-14 h-14">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
-                <FaPlay className="w-8 h-8 ml-1 text-white" />
+                <FaPlay className="w-5 h-5 ml-0.5 text-white" />
               </div>
             </motion.div>
           </motion.div>
@@ -371,23 +371,12 @@ const VideoPlayer = memo(() => {
           {/* Loading State */}
           {isLoading && (
             <div className="absolute inset-0 z-30 flex items-center justify-center bg-gray-900">
-              <div className="w-8 h-8 border-2 border-red-600 rounded-full border-t-transparent animate-spin" />
+              <div className="w-6 h-6 border-2 border-red-600 rounded-full border-t-transparent animate-spin" />
             </div>
           )}
 
           {/* Video Content */}
           {youtubeEmbedUrl ? renderYouTubePlayer() : renderRegularVideoPlayer()}
-
-          {/* Video Title Badge */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.6 }}
-            className="absolute top-3 left-3 bg-black/80 px-3 py-1.5 rounded-lg text-xs font-mono z-20 backdrop-blur-sm text-blue-600 border border-blue-600/50 flex items-center gap-2"
-          >
-            <FaVideo className="w-3 h-3 text-blue-600" />
-            <span>{"INTRODUCTION_2025.MP4"}</span>
-          </motion.div>
         </motion.div>
       </div>
     </motion.div>
@@ -395,115 +384,6 @@ const VideoPlayer = memo(() => {
 });
 
 VideoPlayer.displayName = "VideoPlayer";
-
-// ===== User Avatars Component =====
-const UserAvatars = memo(() => {
-  // Profile images for avatars (using placeholder images)
-  const users = useMemo(
-    () => [
-      {
-        id: 1,
-        bg: "bg-gradient-to-r from-blue-500 to-cyan-500",
-        profile:
-          "https://i.postimg.cc/mkTDq6CZ/487239742-1354528409018334-6501910613559968407-n.jpg",
-      },
-      {
-        id: 2,
-        bg: "bg-gradient-to-r from-purple-500 to-pink-500",
-        profile: "https://i.postimg.cc/j28s1qRv/channels4-profile-1.jpg",
-      },
-      {
-        id: 3,
-        bg: "bg-gradient-to-r from-green-500 to-emerald-500",
-        profile: "https://i.postimg.cc/mDjRcZ1g/channels4-profile.jpg",
-      },
-      {
-        id: 4,
-        bg: "bg-gradient-to-r from-orange-500 to-red-500",
-        profile: "https://i.postimg.cc/MZr2gFyt/unnamed.webp",
-      },
-      {
-        id: 5,
-        bg: "bg-gradient-to-r from-indigo-500 to-blue-500",
-        profile:
-          "https://i.postimg.cc/prm72PfN/482030877-1198505171700609-4335114017922048258-n.jpg",
-      },
-    ],
-    []
-  );
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1.1, duration: 0.6 }}
-      className="flex flex-col items-center justify-center gap-6 mb-8 md:flex-row"
-    >
-      {/* Mobile: Text above avatars */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.3 }}
-        className="block text-center md:hidden"
-      >
-        <p className="mb-1 text-lg font-semibold text-white">
-          Loved by 500+ Businesses worldwide.
-        </p>
-        <p className="text-sm text-gray-300">Our Clients Speak for Us</p>
-      </motion.div>
-
-      {/* Avatars */}
-      <div className="flex -space-x-3">
-        {users.map((user, index) => (
-          <motion.div
-            key={user.id}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.2 + index * 0.1 }}
-            className="relative group"
-          >
-            <div
-              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white/20 ${user.bg} flex items-center justify-center text-white text-xs font-bold shadow-lg overflow-hidden`}
-            >
-              <img
-                src={user.profile}
-                alt="User"
-                className="object-cover w-full h-full"
-              />
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Desktop: Text beside avatars */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1.4 }}
-        className="hidden text-left md:block"
-      >
-        <p className="mb-1 text-lg font-semibold text-white">
-          Loved by 500+ Businesses worldwide.
-        </p>
-        <p className="text-sm text-gray-300">Our Clients Speak for Us</p>
-      </motion.div>
-
-      {/* Mobile: Additional text below avatars */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5 }}
-        className="block text-center md:hidden"
-      >
-        <p className="text-xs text-gray-400">
-          Trusted by industry leaders worldwide
-        </p>
-      </motion.div>
-    </motion.div>
-  );
-});
-
-UserAvatars.displayName = "UserAvatars";
 
 // ===== Smooth Text Animation =====
 const AnimatedText = memo(
@@ -513,7 +393,9 @@ const AnimatedText = memo(
         xl: "text-4xl md:text-6xl lg:text-7xl font-black",
         lg: "text-3xl md:text-5xl lg:text-6xl font-bold",
         md: "text-2xl md:text-4xl lg:text-5xl font-semibold",
-        sm: "text-lg md:text-xl lg:text-2xl font-medium",
+        sm: "text-xl md:text-3xl lg:text-4xl font-semibold",
+        xs: "text-lg md:text-2xl lg:text-3xl font-medium",
+        xxs: "text-base md:text-xl lg:text-2xl font-medium",
       }),
       []
     );
@@ -560,7 +442,7 @@ const AnimatedText = memo(
         className={className}
       >
         <motion.span
-          className={`inline-block ${sizeClasses[size]} tracking-tighter`}
+          className={`inline-block ${sizeClasses[size]} tracking-tight`}
           whileHover={{
             scale: 1.02,
             transition: hoverTransition,
@@ -627,15 +509,15 @@ const HeroSection = memo(() => {
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[20px] z-0" />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 py-20">
-        {/* Heading */}
-        <div className="mb-8 text-center">
-          <div className="mb-4">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 py-12 md:py-16">
+        {/* Heading - Made just a bit more shorter */}
+        <div className="mb-4 text-center">
+          <div className="mb-2">
             <AnimatedText
-              text="Get More Qualified"
+              text="High-Retention YouTube & Short-Form Video Editing"
               color="white"
               delay={0.3}
-              size="lg"
+              size="xs" // Changed from "sm" to "xs" - just a bit more shorter
             />
           </div>
 
@@ -644,32 +526,32 @@ const HeroSection = memo(() => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
-            <AnimatedText
-              text="Leads Through Video Content"
-              delay={0.6}
-              size="md"
-            />
+            <div className="flex flex-col items-center">
+              <AnimatedText
+                text="Long-form videos, podcasts, and Shorts edited for clarity, pacing, and watch time."
+                delay={0.6}
+                size="xxs" // Changed from "xs" to "xxs" - just a bit more shorter
+                className="mb-0.5"
+              />
+            </div>
           </motion.div>
         </div>
 
-        {/* Subtitle - Reduced description size */}
+        {/* Subtitle */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.8 }}
-          className="max-w-2xl mx-auto mb-6 text-center"
+          className="max-w-lg mx-auto mb-4 text-center"
         >
-          <p className="text-base font-light leading-relaxed text-gray-200 md:text-lg">
+          <p className="text-sm font-light leading-relaxed text-gray-200 md:text-base">
             Transform raw footage into professional-grade videos in minutes.
             Experience the future of video editing with advanced processing and
             cinematic rendering.
           </p>
         </motion.div>
 
-        {/* User Avatars Section */}
-        <UserAvatars />
-
-        {/* Single CTA Button - Updated with scroll to contact */}
+        {/* Single CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
@@ -678,23 +560,23 @@ const HeroSection = memo(() => {
             duration: 0.8,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          className="flex justify-center mb-12"
+          className="flex justify-center mb-6"
         >
           <motion.button
             onClick={scrollToContact}
             whileHover={ctaButtonHover}
             whileTap={{ scale: 0.95 }}
-            className="relative px-8 py-3 sm:px-10 sm:py-4 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-xl text-white font-bold text-base sm:text-lg hover:shadow-2xl transition-all group overflow-hidden flex items-center gap-3"
+            className="relative px-5 py-2 sm:px-6 sm:py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-full text-white font-semibold text-xs sm:text-sm hover:shadow-lg transition-all group overflow-hidden flex items-center gap-1.5"
           >
             <span className="relative z-10 flex items-center">
-              <FaRocket className="w-4 h-4 mr-2" />
-              Book a Call
+              <FaRocket className="w-3 h-3 mr-1" />
+              Contact Now
               <motion.span
-                className="ml-2"
+                className="ml-1"
                 animate={arrowAnimation}
                 transition={arrowTransition}
               >
-                <HiArrowRight className="w-4 h-4" />
+                <HiArrowRight className="w-3 h-3" />
               </motion.span>
             </span>
             <motion.div
@@ -714,10 +596,10 @@ const HeroSection = memo(() => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.8 }}
-          className="absolute transform -translate-x-1/2 bottom-8 left-1/2"
+          className="absolute transform -translate-x-1/2 bottom-4 left-1/2"
         >
           <motion.div
-            animate={{ y: [0, 15, 0] }}
+            animate={{ y: [0, 10, 0] }}
             transition={{
               duration: 2,
               repeat: Infinity,
@@ -732,16 +614,16 @@ const HeroSection = memo(() => {
                 repeat: Infinity,
                 repeatType: "loop",
               }}
-              className="text-[#0084FF] text-xs mb-2 tracking-widest font-light flex items-center gap-2"
+              className="text-[#0084FF] text-[10px] mb-1 tracking-widest font-light flex items-center gap-1"
             >
-              <FaChevronDown className="w-2 h-2" />
-              SCROLL TO EXPLORE
-              <FaChevronDown className="w-2 h-2" />
+              <FaChevronDown className="w-1.5 h-1.5" />
+              SCROLL
+              <FaChevronDown className="w-1.5 h-1.5" />
             </motion.span>
             <motion.div
-              className="w-px h-12 bg-gradient-to-b from-[#0084FF] to-transparent"
+              className="w-px h-8 bg-gradient-to-b from-[#0084FF] to-transparent"
               animate={{
-                height: [12, 24, 12],
+                height: [8, 16, 8],
                 opacity: [0.5, 1, 0.5],
               }}
               transition={{

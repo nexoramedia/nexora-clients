@@ -58,7 +58,7 @@ export default function CosmicBookingSection() {
           </motion.div>
 
           {/* Reduced Title Size */}
-          <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl lg:text-5xl">
+          <h2 className="mb-6 text-3xl font-semibold text-white md:text-4xl lg:text-5xl">
             <span
               style={{
                 background: "linear-gradient(45deg, #0084FF, #0066CC, #0099FF)",
@@ -101,7 +101,7 @@ export default function CosmicBookingSection() {
                       <FaRocket className="w-6 h-6 text-blue-400" />
                     </div>
                   </div>
-                  <h3 className="mb-3 text-xl font-bold text-white">
+                  <h3 className="mb-3 text-xl font-semibold text-white">
                     Strategy Session
                   </h3>
                   <div className="flex items-center justify-center gap-2 mb-4 text-blue-300">
@@ -154,7 +154,7 @@ export default function CosmicBookingSection() {
 
                 {/* Price */}
                 <div className="mt-auto text-center">
-                  <span className="px-4 py-2 text-sm font-bold text-blue-400 rounded-full bg-blue-500/20">
+                  <span className="px-4 py-2 text-sm font-semibold text-blue-400 rounded-full bg-blue-500/20">
                     FREE SESSION
                   </span>
                 </div>
