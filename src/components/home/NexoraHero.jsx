@@ -555,7 +555,6 @@ const HeroSection = memo(() => {
             className="relative px-5 py-2 sm:px-6 sm:py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-full text-white font-semibold text-xs sm:text-sm hover:shadow-lg transition-all group overflow-hidden flex items-center gap-1.5"
           >
             <span className="relative z-10 flex items-center">
-              <FaRocket className="w-3 h-3 mr-1" />
               Contact Now
               <motion.span
                 className="ml-1"
