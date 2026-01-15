@@ -36,27 +36,6 @@ export default function CosmicBookingSection() {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <motion.div
-            className="inline-flex items-center gap-3 mb-6 text-base font-medium tracking-widest text-blue-400"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              <HiSparkles className="w-5 h-5" />
-            </motion.div>
-            BOOK DIRECTLY
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              <HiSparkles className="w-5 h-5" />
-            </motion.div>
-          </motion.div>
-
           {/* Reduced Title Size */}
           <h2 className="mb-6 text-3xl font-semibold text-white md:text-4xl lg:text-5xl">
             <span
@@ -211,37 +190,6 @@ export default function CosmicBookingSection() {
             </div>
           </motion.div>
         </div>
-
-        {/* Trust Badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="mt-12 text-center"
-        >
-          <div className="flex flex-wrap items-center justify-center gap-8 text-xs text-gray-300">
-            {[
-              {
-                icon: HiSparkles,
-                text: "Instant Confirmation",
-                color: "text-green-400",
-              },
-              { icon: FaClock, text: "Calendar Sync", color: "text-blue-400" },
-              { icon: FaRocket, text: "Quick Setup", color: "text-cyan-400" },
-            ].map((item, index) => (
-              <motion.div
-                key={item.text}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 + index * 0.1 }}
-                className="flex items-center gap-2"
-              >
-                <item.icon className={`w-3 h-3 ${item.color}`} />
-                <span>{item.text}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </div>
   );

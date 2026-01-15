@@ -490,7 +490,7 @@ const ProtectedVideoShowcase = () => {
           <div className="relative z-30 mx-auto text-center">
             {/* REDUCED TITLE TEXT SIZE */}
             <h2 className="mb-6 text-2xl font-semibold text-white md:text-4xl">
-              Some of our
+              Some of my
               <br />
               <span className="bg-gradient-to-r from-[#66B5FF] to-[#0084FF] bg-clip-text text-transparent">
                 featured projects

@@ -243,7 +243,6 @@ const MobileMenu = ({
                     onClose();
                   }}
                 >
-                  <FaRocket className="w-4 h-4" />
                   Contact Now
                 </motion.button>
               )}
@@ -268,7 +267,7 @@ export default function CosmicNavbar() {
   // Updated navigation with only your three buttons
   const navigation = [
     { name: "About", href: "#about" },
-    { name: "Work", href: "#work" },
+    { name: "Work", href: "#showreel" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -489,7 +488,6 @@ export default function CosmicNavbar() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => scrollToSection("contact", "Contact")}
                 >
-                  <FaRocket className="w-4 h-4" />
                   <span>Contact Now</span>
                   <HiCursorClick className="w-4 h-4" />
                 </motion.button>

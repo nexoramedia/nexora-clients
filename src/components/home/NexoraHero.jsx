@@ -537,20 +537,6 @@ const HeroSection = memo(() => {
           </motion.div>
         </div>
 
-        {/* Subtitle */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
-          className="max-w-lg mx-auto mb-4 text-center"
-        >
-          <p className="text-sm font-light leading-relaxed text-gray-200 md:text-base">
-            Transform raw footage into professional-grade videos in minutes.
-            Experience the future of video editing with advanced processing and
-            cinematic rendering.
-          </p>
-        </motion.div>
-
         {/* Single CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
