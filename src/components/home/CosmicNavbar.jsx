@@ -150,7 +150,8 @@ const MobileMenu = ({
                 }}
                 className="flex items-center gap-3 cursor-pointer group"
               >
-                <img src={logo} alt="Logo" className="w-10 h-10" />
+                {/* Reduced logo size for mobile menu */}
+                <img src={logo} alt="Logo" className="w-8 h-8" />
               </button>
               <button
                 onClick={onClose}
@@ -413,7 +414,8 @@ export default function CosmicNavbar() {
               transition={{ duration: 0.2 }}
               onClick={scrollToHome}
             >
-              <img src={logo} alt="Logo" className="h-20 w-34" />
+              {/* Reduced logo size for main navbar */}
+              <img src={logo} alt="Logo" className="w-auto h-12" />
             </motion.button>
 
             {/* Desktop Navigation */}
@@ -526,7 +528,7 @@ export default function CosmicNavbar() {
       />
 
       {/* Spacer for fixed navbar */}
-      <div className="h-16" />
+      
     </>
   );
 }

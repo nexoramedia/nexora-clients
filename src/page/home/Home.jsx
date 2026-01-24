@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import NexoraFaqs from "../../components/home/NexoraFaqs";
 
 // Lazy load all components
@@ -39,9 +39,53 @@ const SectionLoader = () => (
 );
 
 const Home = () => {
+  // Add smooth scroll behavior on component mount
+  useEffect(() => {
+    // Enable smooth scrolling for the entire document
+    document.documentElement.style.scrollBehavior = "smooth";
+
+    // Remove smooth scroll when component unmounts
+    return () => {
+      document.documentElement.style.scrollBehavior = "auto";
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-black">
-      {/* Navbar loads first since it's critical */}
+      {/* Add custom scrollbar styles */}
+      <style jsx global>{`
+        /* Smooth scrolling */
+        html {
+          scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #0055aa, #0077dd);
+          border-radius: 5px;
+          border: 2px solid #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to bottom, #0077dd, #0099ff);
+        }
+
+        /* For Firefox */
+        * {
+          scrollbar-width: thin;
+          scrollbar-color: #0077dd #0a0a0a;
+        }
+      `}</style>
+
+      {/* Navbar */}
 
       {/* Hero section */}
       <Suspense

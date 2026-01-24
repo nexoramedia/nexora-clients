@@ -2,34 +2,23 @@ import { useRef, useState, useCallback, useMemo, memo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaPlay,
-  FaArrowRight,
-  FaVideo,
-  FaRocket,
   FaChevronDown,
   FaPause,
   FaExpand,
   FaVolumeUp,
   FaVolumeMute,
 } from "react-icons/fa";
-import {
-  HiSparkles,
-  HiCursorClick,
-  HiArrowRight,
-  HiPlay,
-} from "react-icons/hi";
+import { HiArrowRight } from "react-icons/hi";
 import { useVideo } from "../../hook/useVideo";
-
 import bg from "../../assets/bg.jpg";
 
 // YouTube URL handler for introduction videos
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
-
   try {
     const regex =
       /(?:youtube\.com\/(?:shorts\/|watch\?v=)|youtu\.be\/)([^"&?\/\s]{11})/;
     const match = url.match(regex);
-
     if (match && match[1]) {
       const videoId = match[1];
       return `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0`;
@@ -37,7 +26,6 @@ const getYouTubeEmbedUrl = (url) => {
   } catch (error) {
     console.error("Error extracting YouTube embed URL:", error);
   }
-
   return null;
 };
 
@@ -58,7 +46,7 @@ const VideoPlayer = memo(() => {
   const [showControls, setShowControls] = useState(false);
 
   // Use your video hook to fetch introduction videos
-  const { videos, loading, error } = useVideo("introduction");
+  const { videos } = useVideo("introduction");
 
   // Get the first introduction video
   const introductionVideo = useMemo(() => {
@@ -81,7 +69,6 @@ const VideoPlayer = memo(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
-
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
@@ -170,10 +157,6 @@ const VideoPlayer = memo(() => {
     setShowControls(true);
   }, []);
 
-  const toggleControls = useCallback(() => {
-    setShowControls((prev) => !prev);
-  }, []);
-
   // Fallback video source
   const fallbackVideoSource = useMemo(
     () => "https://assets.codepen.io/3364143/sample.mp4",
@@ -195,13 +178,13 @@ const VideoPlayer = memo(() => {
     []
   );
 
-  // YouTube-like aspect ratio (16:9)
+  // Moderately sized YouTube-like aspect ratio (16:9)
   const youtubeAspectRatio = useMemo(
     () => ({
-      container: "w-full max-w-3xl mx-auto mb-4 px-4",
+      container: "w-full max-w-4xl mx-auto px-4", // Changed from max-w-5xl to max-w-4xl (moderate size)
       wrapper: "relative w-full",
       player: {
-        base: "relative w-full overflow-hidden bg-black cursor-pointer rounded-lg",
+        base: "relative w-full overflow-hidden bg-black cursor-pointer rounded-lg shadow-xl", // Changed back to rounded-lg
         aspect: "aspect-video",
       },
     }),
@@ -210,20 +193,17 @@ const VideoPlayer = memo(() => {
 
   // Render YouTube iframe if we have a YouTube video
   const renderYouTubePlayer = () => (
-    <>
-      {/* YouTube Embed */}
-      <div className="absolute inset-0 w-full h-full">
-        <iframe
-          src={youtubeEmbedUrl}
-          className="absolute inset-0 w-full h-full"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          title={"Introduction Video"}
-          onLoad={() => setIsLoading(false)}
-        />
-      </div>
-    </>
+    <div className="absolute inset-0 w-full h-full">
+      <iframe
+        src={youtubeEmbedUrl}
+        className="absolute inset-0 w-full h-full"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        title="Introduction Video"
+        onLoad={() => setIsLoading(false)}
+      />
+    </div>
   );
 
   // Render regular video player with YouTube-like controls
@@ -323,7 +303,7 @@ const VideoPlayer = memo(() => {
         )}
       </AnimatePresence>
 
-      {/* Central Play Button */}
+      {/* Central Play Button - Made moderately sized */}
       <AnimatePresence>
         {showCentralButton && (
           <motion.div
@@ -508,16 +488,16 @@ const HeroSection = memo(() => {
       {/* Very Blurry Overlay - background barely visible */}
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[20px] z-0" />
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 py-12 md:py-16">
-        {/* Heading - Made just a bit more shorter */}
-        <div className="mb-4 text-center">
-          <div className="mb-2">
+      {/* Content - Adjusted padding to move everything higher */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 pt-20 pb-12 md:pt-28 md:pb-16">
+        {/* Heading - Moved higher and made more compact */}
+        <div className="mb-6 text-center">
+          <div className="mb-3">
             <AnimatedText
               text="High-Retention YouTube & Short-Form Video Editing"
               color="white"
               delay={0.3}
-              size="xs" // Changed from "sm" to "xs" - just a bit more shorter
+              size="xs"
             />
           </div>
 
@@ -530,14 +510,14 @@ const HeroSection = memo(() => {
               <AnimatedText
                 text="Long-form videos, podcasts, and Shorts edited for clarity, pacing, and watch time."
                 delay={0.6}
-                size="xxs" // Changed from "xs" to "xxs" - just a bit more shorter
-                className="mb-0.5"
+                size="xxs"
+                className="mb-1"
               />
             </div>
           </motion.div>
         </div>
 
-        {/* Single CTA Button */}
+        {/* Single CTA Button - Moved higher */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
@@ -546,13 +526,13 @@ const HeroSection = memo(() => {
             duration: 0.8,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
-          className="flex justify-center mb-6"
+          className="flex justify-center mb-8"
         >
           <motion.button
             onClick={scrollToContact}
             whileHover={ctaButtonHover}
             whileTap={{ scale: 0.95 }}
-            className="relative px-5 py-2 sm:px-6 sm:py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-full text-white font-semibold text-xs sm:text-sm hover:shadow-lg transition-all group overflow-hidden flex items-center gap-1.5"
+            className="relative px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-full text-white font-semibold text-xs sm:text-sm hover:shadow-lg transition-all group overflow-hidden flex items-center gap-1.5 shadow-md"
           >
             <span className="relative z-10 flex items-center">
               Contact Now
@@ -573,15 +553,17 @@ const HeroSection = memo(() => {
           </motion.button>
         </motion.div>
 
-        {/* YouTube-style Video Player */}
-        <VideoPlayer />
+        {/* YouTube-style Video Player - Moderately sized */}
+        <div className="w-full mt-2 mb-6">
+          <VideoPlayer />
+        </div>
 
         {/* Enhanced Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.8 }}
-          className="absolute transform -translate-x-1/2 bottom-4 left-1/2"
+          className="absolute transform -translate-x-1/2 bottom-6 left-1/2"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
