@@ -21,7 +21,7 @@ const getYouTubeEmbedUrl = (url) => {
     const match = url.match(regex);
     if (match && match[1]) {
       const videoId = match[1];
-      return `https://www.youtube.com/embed/${videoId}?autoplay=0&controls=1&modestbranding=1&rel=0`;
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&rel=0&mute=1`; // Added autoplay=1 and mute=1
     }
   } catch (error) {
     console.error("Error extracting YouTube embed URL:", error);
@@ -86,6 +86,25 @@ const VideoPlayer = memo(() => {
     return () => clearTimeout(hideTimeout);
   }, [videoPlaying, showControls]);
 
+  // Auto-play video when component mounts
+  useEffect(() => {
+    if (videoRef.current && !isYouTube) {
+      const timer = setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play().catch((error) => {
+            console.log("Autoplay failed:", error);
+            // Show play button if autoplay fails
+            setShowCentralButton(true);
+          });
+          setVideoPlaying(true);
+          setShowCentralButton(false);
+        }
+      }, 1000); // Delay autoplay by 1 second
+
+      return () => clearTimeout(timer);
+    }
+  }, [isYouTube]);
+
   const handlePlayPause = useCallback(() => {
     if (videoRef.current) {
       if (videoRef.current.paused) {
@@ -129,6 +148,14 @@ const VideoPlayer = memo(() => {
     setShowControls(true);
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
+      // Auto-replay after 2 seconds
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play();
+          setVideoPlaying(true);
+          setShowCentralButton(false);
+        }
+      }, 2000);
     }
   }, []);
 
@@ -178,13 +205,13 @@ const VideoPlayer = memo(() => {
     []
   );
 
-  // Moderately sized YouTube-like aspect ratio (16:9)
+  // Slightly larger YouTube-like aspect ratio (16:9)
   const youtubeAspectRatio = useMemo(
     () => ({
-      container: "w-full max-w-4xl mx-auto px-4", // Changed from max-w-5xl to max-w-4xl (moderate size)
+      container: "w-full max-w-5xl mx-auto px-4", // Changed from max-w-4xl to max-w-5xl for slightly larger size
       wrapper: "relative w-full",
       player: {
-        base: "relative w-full overflow-hidden bg-black cursor-pointer rounded-lg shadow-xl", // Changed back to rounded-lg
+        base: "relative w-full overflow-hidden bg-black cursor-pointer rounded-xl shadow-2xl", // Changed to rounded-xl and shadow-2xl
         aspect: "aspect-video",
       },
     }),
@@ -238,12 +265,12 @@ const VideoPlayer = memo(() => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-0 left-0 right-0 z-20 p-2 bg-gradient-to-t from-black/80 to-transparent"
+            className="absolute bottom-0 left-0 right-0 z-20 p-3 bg-gradient-to-t from-black/80 to-transparent"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Progress Bar */}
             <div
-              className="relative w-full h-1 mb-2 rounded-full cursor-pointer bg-white/30 group"
+              className="relative w-full h-1.5 mb-3 rounded-full cursor-pointer bg-white/30 group"
               onClick={seekVideo}
             >
               <div
@@ -251,51 +278,61 @@ const VideoPlayer = memo(() => {
                 style={{ width: `${progress}%` }}
               />
               <div
-                className="absolute w-2 h-2 -translate-y-0.5 -translate-x-1 bg-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute w-3 h-3 -translate-y-1 -translate-x-1.5 bg-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 style={{ left: `${progress}%` }}
               />
             </div>
 
             {/* Control Buttons */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 {/* Play/Pause */}
                 <button
                   onClick={handlePlayPause}
-                  className="flex items-center justify-center w-6 h-6 text-white transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
                 >
                   {videoPlaying ? (
-                    <FaPause className="w-3 h-3" />
+                    <FaPause className="w-4 h-4" />
                   ) : (
-                    <FaPlay className="w-3 h-3" />
+                    <FaPlay className="w-4 h-4" />
                   )}
                 </button>
 
                 {/* Volume */}
                 <button
                   onClick={toggleMute}
-                  className="flex items-center justify-center w-6 h-6 text-white transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
                 >
                   {isMuted ? (
-                    <FaVolumeMute className="w-3 h-3" />
+                    <FaVolumeMute className="w-4 h-4" />
                   ) : (
-                    <FaVolumeUp className="w-3 h-3" />
+                    <FaVolumeUp className="w-4 h-4" />
                   )}
                 </button>
 
                 {/* Time Display */}
-                <div className="font-mono text-[10px] text-white">
-                  0:00 / 0:00
+                <div className="font-mono text-xs text-white">
+                  {videoRef.current
+                    ? `${Math.floor(
+                        videoRef.current.currentTime / 60
+                      )}:${Math.floor(videoRef.current.currentTime % 60)
+                        .toString()
+                        .padStart(2, "0")} / ${Math.floor(
+                        videoRef.current.duration / 60
+                      )}:${Math.floor(videoRef.current.duration % 60)
+                        .toString()
+                        .padStart(2, "0")}`
+                    : "0:00 / 0:00"}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 {/* Fullscreen */}
                 <button
                   onClick={handleFullscreen}
-                  className="flex items-center justify-center w-6 h-6 text-white transition-opacity hover:opacity-80"
+                  className="flex items-center justify-center w-8 h-8 text-white transition-opacity hover:opacity-80"
                 >
-                  <FaExpand className="w-3 h-3" />
+                  <FaExpand className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -303,7 +340,7 @@ const VideoPlayer = memo(() => {
         )}
       </AnimatePresence>
 
-      {/* Central Play Button - Made moderately sized */}
+      {/* Central Play Button - Made slightly larger */}
       <AnimatePresence>
         {showCentralButton && (
           <motion.div
@@ -319,9 +356,9 @@ const VideoPlayer = memo(() => {
               whileTap={{ scale: 0.9 }}
               className="relative"
             >
-              <div className="relative flex items-center justify-center bg-red-600 rounded-full shadow-lg w-14 h-14">
+              <div className="relative flex items-center justify-center w-16 h-16 bg-red-600 rounded-full shadow-lg">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
-                <FaPlay className="w-5 h-5 ml-0.5 text-white" />
+                <FaPlay className="w-6 h-6 ml-1 text-white" />
               </div>
             </motion.div>
           </motion.div>
@@ -351,7 +388,7 @@ const VideoPlayer = memo(() => {
           {/* Loading State */}
           {isLoading && (
             <div className="absolute inset-0 z-30 flex items-center justify-center bg-gray-900">
-              <div className="w-6 h-6 border-2 border-red-600 rounded-full border-t-transparent animate-spin" />
+              <div className="w-8 h-8 border-red-600 rounded-full border-3 border-t-transparent animate-spin" />
             </div>
           )}
 
@@ -532,16 +569,16 @@ const HeroSection = memo(() => {
             onClick={scrollToContact}
             whileHover={ctaButtonHover}
             whileTap={{ scale: 0.95 }}
-            className="relative px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-full text-white font-semibold text-xs sm:text-sm hover:shadow-lg transition-all group overflow-hidden flex items-center gap-1.5 shadow-md"
+            className="relative px-6 py-3 sm:px-7 sm:py-3.5 bg-gradient-to-r from-[#0066CC] to-[#0084FF] rounded-full text-white font-semibold text-sm sm:text-base hover:shadow-xl transition-all group overflow-hidden flex items-center gap-2 shadow-lg"
           >
             <span className="relative z-10 flex items-center">
               Contact Now
               <motion.span
-                className="ml-1"
+                className="ml-1.5"
                 animate={arrowAnimation}
                 transition={arrowTransition}
               >
-                <HiArrowRight className="w-3 h-3" />
+                <HiArrowRight className="w-4 h-4" />
               </motion.span>
             </span>
             <motion.div
@@ -553,8 +590,8 @@ const HeroSection = memo(() => {
           </motion.button>
         </motion.div>
 
-        {/* YouTube-style Video Player - Moderately sized */}
-        <div className="w-full mt-2 mb-6">
+        {/* YouTube-style Video Player - Slightly larger */}
+        <div className="w-full mt-4 mb-8">
           <VideoPlayer />
         </div>
 
@@ -563,7 +600,7 @@ const HeroSection = memo(() => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.8 }}
-          className="absolute transform -translate-x-1/2 bottom-6 left-1/2"
+          className="absolute transform -translate-x-1/2 bottom-8 left-1/2"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
@@ -581,16 +618,16 @@ const HeroSection = memo(() => {
                 repeat: Infinity,
                 repeatType: "loop",
               }}
-              className="text-[#0084FF] text-[10px] mb-1 tracking-widest font-light flex items-center gap-1"
+              className="text-[#0084FF] text-xs mb-1.5 tracking-widest font-light flex items-center gap-1.5"
             >
-              <FaChevronDown className="w-1.5 h-1.5" />
+              <FaChevronDown className="w-2 h-2" />
               SCROLL
-              <FaChevronDown className="w-1.5 h-1.5" />
+              <FaChevronDown className="w-2 h-2" />
             </motion.span>
             <motion.div
-              className="w-px h-8 bg-gradient-to-b from-[#0084FF] to-transparent"
+              className="w-px h-10 bg-gradient-to-b from-[#0084FF] to-transparent"
               animate={{
-                height: [8, 16, 8],
+                height: [10, 20, 10],
                 opacity: [0.5, 1, 0.5],
               }}
               transition={{
