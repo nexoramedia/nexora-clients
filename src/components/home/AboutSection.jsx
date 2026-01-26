@@ -743,11 +743,11 @@ const CustomerReviewsCarousel = memo(() => {
         viewport={{ once: true, margin: "-50px" }}
       >
         <h2 className="mb-4 text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
-          Hear what they're Saying about us
+          Hear what they're Saying about me
         </h2>
         <p className="max-w-2xl px-4 mx-auto text-sm text-gray-400 sm:text-base">
-          See how businesses like yours achieved incredible growth with our
-          viral content strategies
+          See how businesses like yours achieved incredible growth with my viral
+          content strategies
         </p>
       </motion.div>
 
