@@ -21,7 +21,7 @@ const getYouTubeEmbedUrl = (url) => {
     const match = url.match(regex);
     if (match && match[1]) {
       const videoId = match[1];
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&rel=0&mute=1`; // Added autoplay=1 and mute=1
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&rel=0&mute=0`; // Added autoplay=1 and mute=1
     }
   } catch (error) {
     console.error("Error extracting YouTube embed URL:", error);
